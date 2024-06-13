@@ -21,7 +21,7 @@ namespace AutoHubFYP.Controllers
         // GET: Colors
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblColors.Include(t => t.Item);
+            var autoPartsHubContext = _context.TblColors.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
             return View(await autoPartsHubContext.ToListAsync());
         }
 
@@ -150,10 +150,11 @@ namespace AutoHubFYP.Controllers
             var tblColor = await _context.TblColors.FindAsync(id);
             if (tblColor != null)
             {
-                _context.TblColors.Remove(tblColor);
+                tblColor.MDelete = true;
+                _context.TblColors.Update(tblColor);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

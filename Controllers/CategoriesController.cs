@@ -21,7 +21,7 @@ namespace AutoHubFYP.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblCategories.ToListAsync());
+            return View(await _context.TblCategories.Where(x => x.MDelete == false || x.MDelete == null).ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -141,10 +141,11 @@ namespace AutoHubFYP.Controllers
             var tblCategory = await _context.TblCategories.FindAsync(id);
             if (tblCategory != null)
             {
-                _context.TblCategories.Remove(tblCategory);
+                tblCategory.MDelete = true;
+                _context.TblCategories.Update(tblCategory);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

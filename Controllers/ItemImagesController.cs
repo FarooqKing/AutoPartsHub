@@ -21,7 +21,7 @@ namespace AutoHubFYP.Controllers
         // GET: ItemImages
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblItemImages.Include(t => t.Item);
+            var autoPartsHubContext = _context.TblItemImages.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
             return View(await autoPartsHubContext.ToListAsync());
         }
 
@@ -148,10 +148,11 @@ namespace AutoHubFYP.Controllers
             var tblItemImage = await _context.TblItemImages.FindAsync(id);
             if (tblItemImage != null)
             {
-                _context.TblItemImages.Remove(tblItemImage);
+                tblItemImage.MDelete = true;
+                _context.TblItemImages.Update(tblItemImage);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

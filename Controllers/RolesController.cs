@@ -23,7 +23,7 @@ namespace AutoHubFYP.Controllers
 	// GET: Roles
 	public async Task<IActionResult> Index()
         {
-            return View(await _context.TblRolls.ToListAsync());
+            return View(await _context.TblRolls.Where(x=>x.MDelete==false||x.MDelete==null).ToListAsync());
         }
 
         // GET: Roles/Details/5
@@ -143,13 +143,13 @@ namespace AutoHubFYP.Controllers
             var tblRoll = await _context.TblRolls.FindAsync(id);
             if (tblRoll != null)
             {
-                //tblRoll.MDelete = true;
+                tblRoll.MDelete = true;
                 //tblRoll.UptadedAt = DateTime.Now;
                 //tblRoll.UpdatedBy = 1;
                 _context.Update(tblRoll);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

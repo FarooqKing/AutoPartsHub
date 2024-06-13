@@ -21,7 +21,7 @@ namespace AutoHubFYP.Controllers
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblTags.ToListAsync());
+            return View(await _context.TblTags.Where(x=>x.MDelete==false|| x.MDelete==null).ToListAsync());
         }
 
         // GET: Tags/Details/5
@@ -141,10 +141,11 @@ namespace AutoHubFYP.Controllers
             var tblTag = await _context.TblTags.FindAsync(id);
             if (tblTag != null)
             {
-                _context.TblTags.Remove(tblTag);
+                tblTag.MDelete = true;
+                _context.TblTags.Update(tblTag);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

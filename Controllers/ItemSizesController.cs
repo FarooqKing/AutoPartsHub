@@ -21,7 +21,7 @@ namespace AutoHubFYP.Controllers
         // GET: ItemSizes
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblItemSizes.Include(t => t.Item);
+            var autoPartsHubContext = _context.TblItemSizes.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
             return View(await autoPartsHubContext.ToListAsync());
         }
 
@@ -148,10 +148,11 @@ namespace AutoHubFYP.Controllers
             var tblItemSize = await _context.TblItemSizes.FindAsync(id);
             if (tblItemSize != null)
             {
-                _context.TblItemSizes.Remove(tblItemSize);
+                tblItemSize.MDelete = true;
+                _context.TblItemSizes.Update(tblItemSize);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

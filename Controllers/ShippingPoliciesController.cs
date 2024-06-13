@@ -21,7 +21,7 @@ namespace AutoHubFYP.Controllers
         // GET: ShippingPolicies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblShippingPolicies.ToListAsync());
+            return View(await _context.TblShippingPolicies.Where(x=>x.MDelete==false||x.MDelete==null).ToListAsync());
         }
 
         // GET: ShippingPolicies/Details/5
@@ -141,10 +141,11 @@ namespace AutoHubFYP.Controllers
             var tblShippingPolicy = await _context.TblShippingPolicies.FindAsync(id);
             if (tblShippingPolicy != null)
             {
-                _context.TblShippingPolicies.Remove(tblShippingPolicy);
+                tblShippingPolicy.MDelete = true;
+                _context.TblShippingPolicies.Update(tblShippingPolicy);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
