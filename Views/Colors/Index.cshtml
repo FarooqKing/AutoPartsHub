@@ -1,0 +1,113 @@
+﻿@model IEnumerable<AutoHubFYP.Models.TblColor>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+
+@* INDEX TABLE DESIGN *@
+
+<div class="row">
+    <div class="col-12">
+
+        <div class="card">
+            <div class="card-header bg-theme">
+                <h4 class="card-title text-white"> Manage Colors</h4>
+                <button type="button" class="btn bg-white" id="CreateColor">
+
+                    <a asp-action="Create" class="text-theme" style="color:#fff" id="CreateRoll">Create New</a>
+                </button>
+
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-responsive-md">
+
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ColorName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ColorExtraAmount)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IsDefaulColor)
+                                </th>
+                              
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ColorName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ColorExtraAmount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsDefaulColor)
+                                    </td>
+                                 
+                                      <td style="display: flex;margin-inline-start:0px !important">
+ 
+                                        <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ColorId"><i class="fa fa-edit "></i></a>
+                                        <a asp-action="Delete" class="btn btn-square btn-danger" asp-route-id="@item.ColorId"><i class="fa fa-trash-o "></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+
+                    @* Create Modal *@
+@* 
+                    <div class="modal fade bd-example-modal-lg" id="ColorCreate" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="CreateModalHeader"> </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="createUserPreview">
+                                    @await Html.PartialAsync("/Views/Colors/_Create.cshtml", new TblColor())
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    @section Scripts {
+                        <script type="text/javascript">
+
+
+                            $("#CreateColor").click(function () {
+                                $("#ColorCreate").modal("show")
+
+                            });
+
+
+
+
+                        </script>
+                    }
+ *@

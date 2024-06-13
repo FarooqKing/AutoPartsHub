@@ -1,0 +1,93 @@
+﻿@model IEnumerable<AutoHubFYP.Models.TblItemImage>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p> *@
+
+
+<div class="row">
+    <div class="col-12">
+
+        <div class="card">
+            <div class="card-header bg-theme">
+                <h4 class="card-title text-white">Item Images</h4>
+                <button type="button" class="btn bg-white" id="CreateUser">
+
+                    <a asp-action="Create" class="text-theme" style="color:#fff">Create New</a>
+                </button>
+
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-responsive-md">
+      
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemImageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThumbailImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NormalImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDefault)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.BanerImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Item)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemImageName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThumbailImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NormalImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDefault)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.BanerImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Item.ItemId)
+            </td>
+
+                                    <td style="display: flex;margin-inline-start:0px !important">
+
+                                        <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ItemImageId"><i class="fa fa-edit "></i></a>
+                                        <a asp-action="Delete" class="btn btn-square btn-danger" asp-route-id="@item.ItemImageId"><i class="fa fa-trash-o "></i></a>
+                                    </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
