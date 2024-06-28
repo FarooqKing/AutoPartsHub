@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AutoHubFYP.Models.TblItemSize>
+﻿@model IEnumerable<AutoPartsHub.Models.TblItemSize>
 
 @{
     ViewData["Title"] = "Index";
@@ -58,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Item.ItemId)
             </td>
             <td style="display:flex;margin-left: 30px !important ">
-                <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.SizeId"><i class="fa fa-edit"></i></a> 
+                <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.SizeId"><i class="fa fa-edit"></i></a> 
            <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.SizeId" asp-for="@item.SizeId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>

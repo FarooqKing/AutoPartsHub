@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class AdminDashboardController : Controller
     {

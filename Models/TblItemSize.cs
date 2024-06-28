@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutoHubFYP.Models;
+namespace AutoPartsHub.Models;
 
 public partial class TblItemSize
 {
     public int SizeId { get; set; }
 
-    public int ItemId { get; set; }
+    public int? ItemId { get; set; }
 
     public string SizeName { get; set; } = null!;
 
@@ -25,5 +25,5 @@ public partial class TblItemSize
 
     public bool MDelete { get; set; }
 
-    public virtual TblItem Item { get; set; } = null!;
+    public virtual TblItem? Item { get; set; }
 }

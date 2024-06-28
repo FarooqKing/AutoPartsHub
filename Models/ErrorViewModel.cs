@@ -1,4 +1,4 @@
-namespace AutoHubFYP.Models
+namespace AutoPartsHub.Models
 {
 	public class ErrorViewModel
 	{

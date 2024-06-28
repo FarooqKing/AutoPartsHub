@@ -1,21 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.Rendering;
+//using Microsoft.EntityFrameworkCore;
+//using AutoPartsHub.Models;
+//using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+
+//namespace AutoPartsHub.Controllers
+//{
+//    public class BrandsController : Controller
+//    {
+//        private readonly AutoPartsHubContext _context;
+//        private readonly IHostingEnvironment _hostingEnvironment;
+//        //2nd Step 
+//        public BrandsController(AutoPartsHubContext context , IHostingEnvironment hostingEnvironment)
+//        {
+//            _context = context;
+//            _hostingEnvironment = hostingEnvironment;
+//        }
+
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class BrandsController : Controller
     {
         private readonly AutoPartsHubContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public BrandsController(AutoPartsHubContext context)
+        public BrandsController(AutoPartsHubContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Brands
@@ -26,7 +51,6 @@ namespace AutoHubFYP.Controllers
           .ToListAsync();
             return View(brands);
         }
-
 
         // GET: Brands/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -57,17 +81,73 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BrandId,BrandName,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
+        //public async Task<IActionResult> Create([Bind("BrandId,BrandName,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var path = _hostingEnvironment.WebRootPath; 
+        //        var filePath = "Images/"
+
+
+        //        _context.Add(tblBrand);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(tblBrand);
+        //}
+
+
+        public async Task<IActionResult> Create([Bind("BrandId,BrandImageFile,BrandName,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
         {
             if (ModelState.IsValid)
             {
+                // Check if an image file is uploaded
+
+                if (tblBrand.BrandImageFile != null)
+                {
+
+                    var fileName = Path.GetFileNameWithoutExtension(tblBrand.BrandImageFile.FileName);
+                    var fileExtension = Path.GetExtension(tblBrand.BrandImageFile.FileName);
+                    var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
+
+                    string wwwRootPath = _hostingEnvironment.WebRootPath;
+                    string UploadedFolder = $"/Uploadimages/BrandImages/";
+
+
+
+
+                    var basePath = Path.Combine(wwwRootPath + UploadedFolder);
+
+
+
+                    bool basePathExists = System.IO.Directory.Exists(basePath);
+
+
+
+                    if (!basePathExists) Directory.CreateDirectory(basePath);
+
+
+
+                    var filePath = Path.Combine(basePath, Image);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        tblBrand.BrandImageFile.CopyTo(stream);
+
+
+                    }
+
+                    string imageURL = UploadedFolder + Image;
+                    tblBrand.BrandImage = imageURL;
+                }
+
+              
+
                 _context.Add(tblBrand);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(tblBrand);
         }
-
         // GET: Brands/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -89,7 +169,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BrandId,BrandName,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
+        public async Task<IActionResult> Edit(int id, [Bind("BrandId,BrandImageFile,BrandName,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
         {
             if (id != tblBrand.BrandId)
             {
@@ -100,6 +180,43 @@ namespace AutoHubFYP.Controllers
             {
                 try
                 {
+                    if (tblBrand.BrandImageFile != null)
+                    {
+
+                        var fileName = Path.GetFileNameWithoutExtension(tblBrand.BrandImageFile.FileName);
+                        var fileExtension = Path.GetExtension(tblBrand.BrandImageFile.FileName);
+                        var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
+
+                        string wwwRootPath = _hostingEnvironment.WebRootPath;
+                        string UploadedFolder = $"/Uploadimages/BrandImages/";
+
+
+
+
+                        var basePath = Path.Combine(wwwRootPath + UploadedFolder);
+
+
+
+                        bool basePathExists = System.IO.Directory.Exists(basePath);
+
+
+
+                        if (!basePathExists) Directory.CreateDirectory(basePath);
+
+
+
+                        var filePath = Path.Combine(basePath, Image);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            tblBrand.BrandImageFile.CopyTo(stream);
+
+
+                        }
+
+                        string imageURL = UploadedFolder + Image;
+                        tblBrand.BrandImage = imageURL;
+                    }
+
                     _context.Update(tblBrand);
                     await _context.SaveChangesAsync();
                 }

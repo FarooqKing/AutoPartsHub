@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutoHubFYP.Models;
+namespace AutoPartsHub.Models;
 
 public partial class TblUser
 {
@@ -11,7 +11,7 @@ public partial class TblUser
 
     public string Email { get; set; } = null!;
 
-    public int PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 
     public string Password { get; set; } = null!;
 

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class UsersController : Controller
     {
@@ -21,9 +21,9 @@ namespace AutoHubFYP.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = await _context.TblUsers.Include(t => t.Roll).Where(b => b.MDelete != null && b.MDelete == false)
+            var AutoPartsHubContext = await _context.TblUsers.Include(t => t.Roll).Where(b => b.MDelete != null && b.MDelete == false)
 		  .ToListAsync(); 
-            return View(autoPartsHubContext);
+            return View(AutoPartsHubContext);
         }
 
         // GET: Users/Details/5
@@ -82,7 +82,7 @@ namespace AutoHubFYP.Controllers
             {
                 return NotFound();
             }
-            ViewData["RollId"] = new SelectList(_context.TblRolls, "RollId", "RollId", tblUser.RollId);
+            ViewData["RollId"] = new SelectList(_context.TblRolls, "RollId", "RollName", tblUser.RollId);
             return View(tblUser);
         }
 
@@ -91,7 +91,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,Email,PhoneNumber,Password,RollId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblUser tblUser)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,Email,PhoneNumber,Password,RollId")] TblUser tblUser)
         {
             if (id != tblUser.UserId)
             {

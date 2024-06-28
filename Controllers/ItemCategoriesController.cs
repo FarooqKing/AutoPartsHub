@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class ItemCategoriesController : Controller
     {
@@ -21,8 +21,8 @@ namespace AutoHubFYP.Controllers
         // GET: ItemCategories
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblItemCategories.Include(t => t.Category).Where(x => x.MDelete == false || x.MDelete == null);
-            return View(await autoPartsHubContext.ToListAsync());
+            var AutoPartsHubContext = _context.TblItemCategories.Include(t => t.Category).Where(x => x.MDelete == false || x.MDelete == null);
+            return View(await AutoPartsHubContext.ToListAsync());
         }
 
         // GET: ItemCategories/Details/5

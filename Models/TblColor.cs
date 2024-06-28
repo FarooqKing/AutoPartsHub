@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace AutoHubFYP.Models;
+namespace AutoPartsHub.Models;
 
 public partial class TblColor
 {
     public int ColorId { get; set; }
 
-    [Required(ErrorMessage = "Item is required")]
-    public int ItemId { get; set; }
+    public int? ItemId { get; set; }
 
-    [Required(ErrorMessage = "Color Name is required")]
-    public string ColorName { get; set; }
+    public string ColorName { get; set; } = null!;
 
-    [Display(Name = "Extra Amount")]
     public decimal? ColorExtraAmount { get; set; }
 
-    [Display(Name = "Is Default")]
-    public bool? IsDefaulColor { get; set; }
+    public bool? IsDefaultColor { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -30,5 +25,5 @@ public partial class TblColor
 
     public bool MDelete { get; set; }
 
-    public virtual TblItem Item { get; set; } = null!;
+    public virtual TblItem? Item { get; set; }
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class ItemImagesController : Controller
     {
@@ -21,8 +21,8 @@ namespace AutoHubFYP.Controllers
         // GET: ItemImages
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblItemImages.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
-            return View(await autoPartsHubContext.ToListAsync());
+            var AutoPartsHubContext = _context.TblItemImages.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
+            return View(await AutoPartsHubContext.ToListAsync());
         }
 
         // GET: ItemImages/Details/5
@@ -47,7 +47,7 @@ namespace AutoHubFYP.Controllers
         // GET: ItemImages/Create
         public IActionResult Create()
         {
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId");
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemImageId,ItemImageName,ThumbailImage,NormalImage,IsDefault,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
+        public async Task<IActionResult> Create([Bind("ItemImageId,ItemImageName,ThumbailImage,NormalImage,IsDefault,ItemId,ItemName,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace AutoHubFYP.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemImage.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemImage.ItemId);
             return View(tblItemImage);
         }
 
@@ -81,7 +81,7 @@ namespace AutoHubFYP.Controllers
             {
                 return NotFound();
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemImage.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemImage.ItemId);
             return View(tblItemImage);
         }
 
@@ -90,7 +90,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemImageId,ItemImageName,ThumbailImage,NormalImage,IsDefault,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemImageId,ItemName,ItemImageName,ThumbailImage,NormalImage,IsDefault,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
         {
             if (id != tblItemImage.ItemImageId)
             {
@@ -117,7 +117,7 @@ namespace AutoHubFYP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemImage.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemImage.ItemId);
             return View(tblItemImage);
         }
 

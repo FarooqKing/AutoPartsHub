@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AutoHubFYP.Models.TblBrand>
+﻿@model IEnumerable<AutoPartsHub.Models.TblBrand>
 
 @{
     ViewData["Title"] = "Index";
@@ -23,10 +23,7 @@
                     <table class="table table-responsive-md">
                         <thead>
                             <tr>
-                                <th>
-
-                                    Brand Image
-                                </th>
+                               
                                 <th>
 
                                     Brand Name
@@ -45,7 +42,10 @@
 
                                 </th>
 
+                                <th>
 
+                                    Brand Image
+                                </th>
 
                                 <th>
                                     Actions
@@ -69,11 +69,12 @@
                                         @Html.DisplayFor(modelItem => item.BrandDescription)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.BrandImage)
+                                        <img src="@Html.DisplayFor(modelItem => item.BrandImage)" class="w-50 img-responsive" />
+                                        
                                     </td>
 
                                     <td style="display: flex;margin-left: -30px !important;">
-                                        <a asp-action="Edit" class="btn btn-sm btn-primary" asp-route-id="@item.BrandId"><i class="fa fa-edit "></i></a>
+                                        <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.BrandId"><i class="fa fa-edit "></i></a>
                                         @*      <a asp-action="Details" class="btn  btn-square btn-warning" asp-route-id="@item.BrandId">
                                     <i class="fa fa-info-circle " aria-hidden="true"></i>
                                     </a> *@

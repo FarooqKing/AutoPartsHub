@@ -1,8 +1,8 @@
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
 	public class HomeController : Controller
 	{

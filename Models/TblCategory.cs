@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AutoHubFYP.Models;
+namespace AutoPartsHub.Models;
 
 public partial class TblCategory
 {
@@ -9,7 +9,7 @@ public partial class TblCategory
 
     public string CategoryName { get; set; } = null!;
 
-    public string CategoryTital { get; set; } = null!;
+    public string CategoryTitle { get; set; } = null!;
 
     public string? CategoryDescription { get; set; }
 

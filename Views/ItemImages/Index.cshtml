@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AutoHubFYP.Models.TblItemImage>
+﻿@model IEnumerable<AutoPartsHub.Models.TblItemImage>
 
 @{
     ViewData["Title"] = "Index";
@@ -79,7 +79,7 @@
 
                                     <td style="display: flex;margin-inline-start:0px !important">
 
-                                        <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ItemImageId"><i class="fa fa-edit "></i></a>
+                                        <a asp-action="Edit" class="btn btn-sm m-2  btn-primary" asp-route-id="@item.ItemImageId"><i class="fa fa-edit "></i></a>
                                    <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ItemImageId" asp-for="@item.ItemImageId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>

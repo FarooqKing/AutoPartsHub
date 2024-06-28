@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class ColorsController : Controller
     {
@@ -21,8 +21,8 @@ namespace AutoHubFYP.Controllers
         // GET: Colors
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblColors.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
-            return View(await autoPartsHubContext.ToListAsync());
+            var AutoPartsHubContext = _context.TblColors.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
+            return View(await AutoPartsHubContext.ToListAsync());
         }
 
         // GET: Colors/Details/5
@@ -56,7 +56,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ColorId,ItemId,ColorName,ColorExtraAmount,IsDefaulColor")] TblColor tblColor)
+        public async Task<IActionResult> Create([Bind("ColorId,ItemId,ItemName,ColorName,ColorExtraAmount,IsDefaulColor")] TblColor tblColor)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace AutoHubFYP.Controllers
             {
                 return NotFound();
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblColor.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblColor.ItemId);
             return View(tblColor);
         }
 
@@ -92,7 +92,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ColorId,ItemId,ColorName,ColorExtraAmount,IsDefaulColor,CreatedAt,CreatedBy,UpdatedAt,UpdateBy,MDelete")] TblColor tblColor)
+        public async Task<IActionResult> Edit(int id, [Bind("ColorId,ItemId,ItemName,ColorName,ColorExtraAmount,IsDefaulColor,CreatedAt,CreatedBy,UpdatedAt,UpdateBy,MDelete")] TblColor tblColor)
         {
             if (id != tblColor.ColorId)
             {
@@ -119,7 +119,7 @@ namespace AutoHubFYP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblColor.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblColor.ItemId);
             return View(tblColor);
         }
 

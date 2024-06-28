@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AutoHubFYP.Models.TblVoucherCode>
+﻿@model IEnumerable<AutoPartsHub.Models.TblVoucherCode>
 
 @{
     ViewData["Title"] = "Index";
@@ -72,7 +72,7 @@
                 @Html.DisplayFor(modelItem => item.VoucherExpireDate)
             </td>
             <td style="display:flex;margin-inline:0px !important">
-                <a asp-action="Edit"  class="btn btn-square btn-primary" asp-route-id="@item.VoucherId"><i class="fa fa-edit"></i></a> 
+                <a asp-action="Edit"  class="btn btn-sm m-2 btn-primary" asp-route-id="@item.VoucherId"><i class="fa fa-edit"></i></a> 
                 
 <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.VoucherId" asp-for="@item.VoucherId" />

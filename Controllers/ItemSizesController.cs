@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 
-namespace AutoHubFYP.Controllers
+namespace AutoPartsHub.Controllers
 {
     public class ItemSizesController : Controller
     {
@@ -21,8 +21,8 @@ namespace AutoHubFYP.Controllers
         // GET: ItemSizes
         public async Task<IActionResult> Index()
         {
-            var autoPartsHubContext = _context.TblItemSizes.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
-            return View(await autoPartsHubContext.ToListAsync());
+            var AutoPartsHubContext = _context.TblItemSizes.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
+            return View(await AutoPartsHubContext.ToListAsync());
         }
 
         // GET: ItemSizes/Details/5
@@ -47,7 +47,7 @@ namespace AutoHubFYP.Controllers
         // GET: ItemSizes/Create
         public IActionResult Create()
         {
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId");
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SizeId,ItemId,SizeName,SizeExtraAmount,IsDefaultSize,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
+        public async Task<IActionResult> Create([Bind("SizeId,ItemId,ItemName,SizeName,SizeExtraAmount,IsDefaultSize,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace AutoHubFYP.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemSize.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemSize.ItemId);
             return View(tblItemSize);
         }
 
@@ -81,7 +81,7 @@ namespace AutoHubFYP.Controllers
             {
                 return NotFound();
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemSize.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemSize.ItemId);
             return View(tblItemSize);
         }
 
@@ -90,7 +90,7 @@ namespace AutoHubFYP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SizeId,ItemId,SizeName,SizeExtraAmount,IsDefaultSize,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
+        public async Task<IActionResult> Edit(int id, [Bind("SizeId,ItemName,ItemId,SizeName,SizeExtraAmount,IsDefaultSize,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
         {
             if (id != tblItemSize.SizeId)
             {
@@ -117,7 +117,7 @@ namespace AutoHubFYP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemSize.ItemId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemSize.ItemId);
             return View(tblItemSize);
         }
 

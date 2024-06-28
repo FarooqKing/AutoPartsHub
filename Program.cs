@@ -1,4 +1,4 @@
-using AutoHubFYP.Models;
+using AutoPartsHub.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

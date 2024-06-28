@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AutoHubFYP.Models;
+namespace AutoPartsHub.Models;
 
 public partial class TblBrand
 {
@@ -26,6 +27,7 @@ public partial class TblBrand
     public int? UpdatedBy { get; set; }
 
     public bool MDelete { get; set; }
-
+    [NotMapped]
+    public IFormFile BrandImageFile { get; set; }
     public virtual ICollection<TblItem> TblItems { get; set; } = new List<TblItem>();
 }

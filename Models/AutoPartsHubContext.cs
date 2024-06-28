@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoHubFYP.Models;
+namespace AutoPartsHub.Models;
 
 public partial class AutoPartsHubContext : DbContext
 {
@@ -65,7 +65,7 @@ public partial class AutoPartsHubContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost; DataBase=AutoPartsHub; Trusted_Connection=True; TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=UMAR-PC; Database=AutoPartsHub; Trusted_Connection=True; TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -94,7 +94,7 @@ public partial class AutoPartsHubContext : DbContext
             entity.Property(e => e.CategoryDescription).HasMaxLength(1000);
             entity.Property(e => e.CategoryImage).HasMaxLength(500);
             entity.Property(e => e.CategoryName).HasMaxLength(250);
-            entity.Property(e => e.CategoryTital).HasMaxLength(250);
+            entity.Property(e => e.CategoryTitle).HasMaxLength(250);
             entity.Property(e => e.MDelete).HasColumnName("mDelete");
         });
 
@@ -125,7 +125,6 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.TblColors)
                 .HasForeignKey(d => d.ItemId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tbl_Color_tbl_Items");
         });
 
@@ -179,6 +178,7 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Brand).WithMany(p => p.TblItems)
                 .HasForeignKey(d => d.BrandId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_tbl_Items_tbl_Brand");
         });
 
@@ -207,7 +207,7 @@ public partial class AutoPartsHubContext : DbContext
             entity.ToTable("tbl_ItemImages");
 
             entity.Property(e => e.ItemImageId).HasColumnName("ItemImageID");
-            entity.Property(e => e.BanerImage).HasMaxLength(50);
+            entity.Property(e => e.BanerImage).HasMaxLength(500);
             entity.Property(e => e.ItemId).HasColumnName("ItemID");
             entity.Property(e => e.ItemImageName).HasMaxLength(50);
             entity.Property(e => e.MDelete).HasColumnName("mDelete");
@@ -245,7 +245,6 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.TblItemSizes)
                 .HasForeignKey(d => d.ItemId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tbl_Item_Size_tbl_Items");
         });
 
@@ -447,11 +446,11 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.ToTable("tbl_User");
 
-            entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.MDelete).HasColumnName("mDelete");
             entity.Property(e => e.Password).HasMaxLength(50);
+            entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.RollId).HasColumnName("RollID");
             entity.Property(e => e.UserName).HasMaxLength(50);
 

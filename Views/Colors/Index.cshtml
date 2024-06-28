@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AutoHubFYP.Models.TblColor>
+﻿@model IEnumerable<AutoPartsHub.Models.TblColor>
 
 @{
     ViewData["Title"] = "Index";
@@ -33,13 +33,16 @@
                         <thead>
                             <tr>
                                 <th>
+                                    @Html.DisplayNameFor(model => model.Item.ItemName)
+                                </th>
+                                <th>
                                     @Html.DisplayNameFor(model => model.ColorName)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.ColorExtraAmount)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.IsDefaulColor)
+                                    @Html.DisplayNameFor(model => model.IsDefaultColor)
                                 </th>
                               
                                 <th>
@@ -52,19 +55,22 @@
                             {
                                 <tr>
                                     <td>
+                                        @Html.DisplayFor(modelItem => item.Item.ItemName)
+                                    </td>
+                                    <td>
                                         @Html.DisplayFor(modelItem => item.ColorName)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ColorExtraAmount)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.IsDefaulColor)
+                                        @Html.DisplayFor(modelItem => item.IsDefaultColor)
                                     </td>
                                  
                                       <td style="display: flex;margin-inline-start:0px !important">
  
-                                        <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ColorId"><i class="fa fa-edit "></i></a>
-                                    <form asp-action="Delete" method="post" class="deleteForm">
+                                        <a asp-action="Edit" class="btn btn-square btn-primary m-2" asp-route-id="@item.ColorId"><i class="fa fa-edit "></i></a>
+                                     <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ColorId" asp-for="@item.ColorId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
                                         </form>
