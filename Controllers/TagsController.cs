@@ -9,6 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthentication]
     public class TagsController : Controller
     {
         private readonly AutoPartsHubContext _context;

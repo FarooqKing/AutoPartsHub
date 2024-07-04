@@ -9,6 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthentication]
     public class RolesController : Controller
     {
         private readonly AutoPartsHubContext _context;

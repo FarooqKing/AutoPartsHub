@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthentication]
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;

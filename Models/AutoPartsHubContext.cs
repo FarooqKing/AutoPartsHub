@@ -6,9 +6,7 @@ namespace AutoPartsHub.Models;
 
 public partial class AutoPartsHubContext : DbContext
 {
-    public AutoPartsHubContext()
-    {
-    }
+
 
     public AutoPartsHubContext(DbContextOptions<AutoPartsHubContext> options)
         : base(options)

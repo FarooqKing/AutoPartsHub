@@ -1,25 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.Rendering;
-//using Microsoft.EntityFrameworkCore;
-//using AutoPartsHub.Models;
-//using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-
-//namespace AutoPartsHub.Controllers
-//{
-//    public class BrandsController : Controller
-//    {
-//        private readonly AutoPartsHubContext _context;
-//        private readonly IHostingEnvironment _hostingEnvironment;
-//        //2nd Step 
-//        public BrandsController(AutoPartsHubContext context , IHostingEnvironment hostingEnvironment)
-//        {
-//            _context = context;
-//            _hostingEnvironment = hostingEnvironment;
-//        }
+﻿
 
 using System;
 using System.IO;
@@ -32,6 +11,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthentication]
     public class BrandsController : Controller
     {
         private readonly AutoPartsHubContext _context;
