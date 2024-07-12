@@ -5,15 +5,15 @@ namespace AutoPartsHub.Models;
 
 public partial class TblItemSize
 {
-    public int SizeId { get; set; }
+    public int ItemSizeId { get; set; }
+
+    public int? SizeId { get; set; }
 
     public int? ItemId { get; set; }
 
-    public string SizeName { get; set; } = null!;
+    public decimal? SizePrice { get; set; }
 
-    public decimal? SizeExtraAmount { get; set; }
-
-    public bool? IsDefaultSize { get; set; }
+    public Boolean IsDefault { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -23,7 +23,9 @@ public partial class TblItemSize
 
     public int? UpdatedBy { get; set; }
 
-    public bool MDelete { get; set; }
+    public bool? MDelete { get; set; }
 
     public virtual TblItem? Item { get; set; }
+
+    public virtual TblSize? Size { get; set; }
 }

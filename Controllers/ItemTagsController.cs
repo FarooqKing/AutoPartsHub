@@ -9,7 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class ItemTagsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +22,7 @@ namespace AutoPartsHub.Controllers
         // GET: ItemTags
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblItemTags.Include(t => t.Item).Include(t => t.Tag).Where(x=>x.MDelete==false||x.MDelete==null);
+            var AutoPartsHubContext = _context.TblItemTags.Include(t => t.Item).Include(t => t.Tag);
             return View(await AutoPartsHubContext.ToListAsync());
         }
 
@@ -49,8 +49,8 @@ namespace AutoPartsHub.Controllers
         // GET: ItemTags/Create
         public IActionResult Create()
         {
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId");
-            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagId");
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagName");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace AutoPartsHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemTag.ItemId);
-            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagId", tblItemTag.TagId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemTag.ItemId);
+            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagName", tblItemTag.TagId);
             return View(tblItemTag);
         }
 
@@ -85,8 +85,8 @@ namespace AutoPartsHub.Controllers
             {
                 return NotFound();
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemTag.ItemId);
-            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagId", tblItemTag.TagId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemTag.ItemId);
+            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagName", tblItemTag.TagId);
             return View(tblItemTag);
         }
 
@@ -122,8 +122,8 @@ namespace AutoPartsHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemId", tblItemTag.ItemId);
-            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagId", tblItemTag.TagId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemTag.ItemId);
+            ViewData["TagId"] = new SelectList(_context.TblTags, "TagId", "TagName", tblItemTag.TagId);
             return View(tblItemTag);
         }
 

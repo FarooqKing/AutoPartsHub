@@ -39,19 +39,19 @@
                                 <input asp-for="VoucherDiscount" class="form-control" />
                                 <span asp-validation-for="VoucherDiscount" class="text-danger"></span>
                             </div>
-                            <div class="col-md-6 mt-4">
-                                <label asp-for="Ispercentage" class="control-label">Is percentage</label>
-                                <input asp-for="Ispercentage" class="form-control" />
+                            <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
+                                <label asp-for="Ispercentage" class="control-label">Is Percent</label>
+                                <input asp-for="Ispercentage" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
                                 <span asp-validation-for="Ispercentage" class="text-danger"></span>
                             </div>
-                            <div class="col-md-6 mt-4">
+                            <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
                                 <label asp-for="IsUsed" class="control-label">Is Used</label>
-                                <input asp-for="IsUsed" class="form-control" />
+                                <input asp-for="IsUsed" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
                                 <span asp-validation-for="IsUsed" class="text-danger"></span>
                             </div>
-                            <div class="col-md-6 mt-4">
+                            <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
                                 <label asp-for="IsExpired" class="control-label">Is Expired</label>
-                                <input asp-for="IsExpired" class="form-control" />
+                                <input asp-for="IsExpired" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
                                 <span asp-validation-for="IsExpired" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mt-4">

@@ -10,122 +10,122 @@ namespace AutoPartsHub.Controllers
     public class AuthenticationController : Controller
     {
        
-            private readonly AutoPartsHubContext _UserContext;
-            public AuthenticationController(AutoPartsHubContext context)
-            {
-                _UserContext = context;
-            }
-            public IActionResult Login()
-            {
-                return View();
-            }
-            [HttpPost]
-            public async Task<IActionResult> Login(LoginModel loginModel)
-            {
-                try
-                {
-                    var user = await _UserContext.TblUsers.Where(x => (x.MDelete == false || x.MDelete == null) && x.Email.ToLower() == loginModel.Username.ToLower() && x.Password == loginModel.Password).Include(x => x.Roll).FirstOrDefaultAsync();
+        //    private readonly AutoPartsHubContext _UserContext;
+        //    public AuthenticationController(AutoPartsHubContext context)
+        //    {
+        //        _UserContext = context;
+        //    }
+        //    public IActionResult Login()
+        //    {
+        //        return View();
+        //    }
+        //    [HttpPost]
+        //    public async Task<IActionResult> Login(LoginModel loginModel)
+        //    {
+        //        try
+        //        {
+        //            var user = await _UserContext.TblUsers.Where(x => (x.MDelete == false || x.MDelete == null) && x.Email.ToLower() == loginModel.Username.ToLower() && x.Password == loginModel.Password).Include(x => x.Roll).FirstOrDefaultAsync();
 
-                    if (user is null || user.UserId <= 0)
-                    {
-                        throw new Exception("User Name or Password is invalid");
-                    }
-
-
+        //            if (user is null || user.UserId <= 0)
+        //            {
+        //                throw new Exception("User Name or Password is invalid");
+        //            }
 
 
 
 
-                    else if (user is not null || user.UserId > 0)
-                    {
-                        var claims = new List<Claim>
-        {
-                       new Claim(ClaimTypes.Name, user.UserName),
-                       new Claim(ClaimTypes.Email, user.Email),
-                       new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                       new Claim(ClaimTypes.Role, user.Roll.RollName),
-                       new Claim("RoleId", user.RollId.ToString()),
-        };
 
-                        var claimsIdentity = new ClaimsIdentity(
-                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                        var authProperties = new AuthenticationProperties
-                        {
-                            //AllowRefresh = <bool>,
-                            // Refreshing the authentication session should be allowed.
+        //            else if (user is not null || user.UserId > 0)
+        //            {
+        //                var claims = new List<Claim>
+        //{
+        //               new Claim(ClaimTypes.Name, user.UserName),
+        //               new Claim(ClaimTypes.Email, user.Email),
+        //               new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        //               new Claim(ClaimTypes.Role, user.Roll.RollName),
+        //               new Claim("RoleId", user.RollId.ToString()),
+        //};
 
-                            //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                            // The time at which the authentication ticket expires. A 
-                            // value set here overrides the ExpireTimeSpan option of 
-                            // CookieAuthenticationOptions set with AddCookie.
+        //                var claimsIdentity = new ClaimsIdentity(
+        //                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                            IsPersistent = true,
-                            // Whether the authentication session is persisted across 
-                            // multiple requests. When used with cookies, controls
-                            // whether the cookie's lifetime is absolute (matching the
-                            // lifetime of the authentication ticket) or session-based.
+        //                var authProperties = new AuthenticationProperties
+        //                {
+        //                    //AllowRefresh = <bool>,
+        //                    // Refreshing the authentication session should be allowed.
 
-                            //IssuedUtc = <DateTimeOffset>,
-                            // The time at which the authentication ticket was issued.
+        //                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+        //                    // The time at which the authentication ticket expires. A 
+        //                    // value set here overrides the ExpireTimeSpan option of 
+        //                    // CookieAuthenticationOptions set with AddCookie.
 
-                            //RedirectUri = <string>
-                            // The full path or absolute URI to be used as an http 
-                            // redirect response value.
-                        };
+        //                    IsPersistent = true,
+        //                    // Whether the authentication session is persisted across 
+        //                    // multiple requests. When used with cookies, controls
+        //                    // whether the cookie's lifetime is absolute (matching the
+        //                    // lifetime of the authentication ticket) or session-based.
 
-                        await HttpContext.SignInAsync(
-                            CookieAuthenticationDefaults.AuthenticationScheme,
-                            new ClaimsPrincipal(claimsIdentity),
-                            authProperties);
-                        var roleName = user.Roll?.RollName;
+        //                    //IssuedUtc = <DateTimeOffset>,
+        //                    // The time at which the authentication ticket was issued.
 
-                        if (roleName == "Admin")
-                        {
-                            return RedirectToAction("Index", "AdminDashboard");
-                        }
-                        else if (roleName == "Client")
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
+        //                    //RedirectUri = <string>
+        //                    // The full path or absolute URI to be used as an http 
+        //                    // redirect response value.
+        //                };
+
+        //                await HttpContext.SignInAsync(
+        //                    CookieAuthenticationDefaults.AuthenticationScheme,
+        //                    new ClaimsPrincipal(claimsIdentity),
+        //                    authProperties);
+        //                var roleName = user.Roll?.RollName;
+
+        //                if (roleName == "Admin")
+        //                {
+        //                    return RedirectToAction("Index", "AdminDashboard");
+        //                }
+        //                else if (roleName == "Client")
+        //                {
+        //                    return RedirectToAction("Index", "Home");
+        //                }
                        
-                    }
+        //            }
 
 
-                    throw new Exception("Some things went wrong");
+        //            throw new Exception("Some things went wrong");
 
-                }
-                catch (Exception exp)
-                {
+        //        }
+        //        catch (Exception exp)
+        //        {
 
-                    loginModel.Password = "";
-                    loginModel.InvalidMessage = exp.Message;
-                    loginModel.isInvalid = true;
+        //            loginModel.Password = "";
+        //            loginModel.InvalidMessage = exp.Message;
+        //            loginModel.isInvalid = true;
 
 
-                    return View(loginModel);
-                }
-            }
+        //            return View(loginModel);
+        //        }
+        //    }
 
            
 
 
-            [Route("forgotpassword")]
-            public IActionResult ForgotPassword()
-            {
-                return View();
-            }
+        //    [Route("forgotpassword")]
+        //    public IActionResult ForgotPassword()
+        //    {
+        //        return View();
+        //    }
 
-            [Route("Logout")]
-            public async Task<IActionResult> LogoutAsync()
-            {
-                string returnUrl = null;
-                // Clear the existing external cookies
-                await HttpContext.SignOutAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme);
+        //    [Route("Logout")]
+        //    public async Task<IActionResult> LogoutAsync()
+        //    {
+        //        string returnUrl = null;
+        //        // Clear the existing external cookies
+        //        await HttpContext.SignOutAsync(
+        //            CookieAuthenticationDefaults.AuthenticationScheme);
 
-                return RedirectToAction("Login", "/");
-            }
+        //        return RedirectToAction("Login", "/");
+        //    }
         }
 
     }

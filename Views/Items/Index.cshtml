@@ -14,22 +14,18 @@
     <div class="col-12">
 
         <div class="card">
-            <div class="card-header bg-theme">
-                <h4 class="card-title text-white">Items</h4>
+            <div class="card-header bg-theme ">
+                <h4 class="card-title text-white">Brands</h4>
                 <button type="button" class="btn bg-white" id="CreateUser">
 
-                    <a asp-action="Create" class="text-theme" style="color:#fff">Create New</a>
+                    <a asp-action="Create" class=" text-theme" style="color:#fff">Create New</a>
                 </button>
 
             </div>
 
             <div class="card-body">
                 <div class="table-responsive">
-                     <table id="example4" class="display" style="min-width: 845px">
-                     <table class="table">
- </div>
- </div>
- </div>
+                    <table class="table table-responsive-md">
 
     <thead>
         <tr>
@@ -92,7 +88,7 @@
                 @Html.DisplayFor(modelItem => item.Sku)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DefaultImageUrl)
+                                        <img src="@Html.DisplayFor(modelItem => item.DefaultImageUrl)" alt="Item Image" class="w-75 img-responsive" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShortDescription)
@@ -117,6 +113,9 @@
         </tr>
 }
     </tbody>
-</table>
-</div>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

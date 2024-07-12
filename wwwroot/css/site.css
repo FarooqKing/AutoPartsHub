@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.form-switch .form-check-input{
+    margin-left:0.2rem !important;
+}

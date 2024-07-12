@@ -7,13 +7,7 @@ public partial class TblColor
 {
     public int ColorId { get; set; }
 
-    public int? ItemId { get; set; }
-
     public string ColorName { get; set; } = null!;
-
-    public decimal? ColorExtraAmount { get; set; }
-
-    public bool? IsDefaultColor { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -25,5 +19,5 @@ public partial class TblColor
 
     public bool MDelete { get; set; }
 
-    public virtual TblItem? Item { get; set; }
+    public virtual ICollection<TblItemColor> TblItemColors { get; set; } = new List<TblItemColor>();
 }

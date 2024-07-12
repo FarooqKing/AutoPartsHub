@@ -9,7 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class UsersController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +22,7 @@ namespace AutoPartsHub.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = await _context.TblUsers.Include(t => t.Roll).Where(b => b.MDelete != null && b.MDelete == false)
+            var AutoPartsHubContext = await _context.TblUsers.Include(t => t.Roll)
 		  .ToListAsync(); 
             return View(AutoPartsHubContext);
         }

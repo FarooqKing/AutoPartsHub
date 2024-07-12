@@ -28,26 +28,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ColorId" />
             <div class="form-group row">
-            <div class="col-md-6">
-                                <label asp-for="ItemId" class="control-label">Item Id</label>
-                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId"></select>
-                <span asp-validation-for="ItemId" class="text-danger"></span>
-            </div>
+         
                 <div class="col-md-6">
                                 <label asp-for="ColorName" class="control-label">Color Name</label>
                 <input asp-for="ColorName" class="form-control" />
                 <span asp-validation-for="ColorName" class="text-danger"></span>
             </div>
-                <div class="col-md-6 mt-4">
-                                <label asp-for="ColorExtraAmount" class="control-label">Color Extra Amount</label>
-                <input asp-for="ColorExtraAmount" class="form-control" />
-                <span asp-validation-for="ColorExtraAmount" class="text-danger"></span>
-            </div>
-                <div class="col-md-6 mt-4">
-                                <label asp-for="IsDefaultColor" class="control-label">Is Defaul Color</label>
-                <input asp-for="IsDefaultColor" class="form-control" />
-                <span asp-validation-for="IsDefaultColor" class="text-danger"></span>
-            </div>
+           
+          
             <div class="form-group row">
                 <div class="col-md-12  mt-4">
 

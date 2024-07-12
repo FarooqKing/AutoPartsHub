@@ -9,7 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class ColorsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +22,7 @@ namespace AutoPartsHub.Controllers
         // GET: Colors
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblColors.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
+            var AutoPartsHubContext = _context.TblColors;
             return View(await AutoPartsHubContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace AutoPartsHub.Controllers
             }
 
             var tblColor = await _context.TblColors
-                .Include(t => t.Item)
+              
                 .FirstOrDefaultAsync(m => m.ColorId == id);
             if (tblColor == null)
             {
@@ -48,7 +48,7 @@ namespace AutoPartsHub.Controllers
         // GET: Colors/Create
         public IActionResult Create()
         {
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+           
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ColorId,ItemId,ItemName,ColorName,ColorExtraAmount,IsDefaulColor")] TblColor tblColor)
+        public async Task<IActionResult> Create([Bind("ColorId,ColorName")] TblColor tblColor)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,6 @@ namespace AutoPartsHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblColor.ItemId);
             return View(tblColor);
         }
 
@@ -84,7 +83,6 @@ namespace AutoPartsHub.Controllers
             {
                 return NotFound();
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblColor.ItemId);
             return View(tblColor);
         }
 
@@ -93,7 +91,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ColorId,ItemId,ItemName,ColorName,ColorExtraAmount,IsDefaulColor,CreatedAt,CreatedBy,UpdatedAt,UpdateBy,MDelete")] TblColor tblColor)
+        public async Task<IActionResult> Edit(int id, [Bind("ColorId,ColorName")] TblColor tblColor)
         {
             if (id != tblColor.ColorId)
             {
@@ -120,7 +118,6 @@ namespace AutoPartsHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblColor.ItemId);
             return View(tblColor);
         }
 
@@ -133,7 +130,7 @@ namespace AutoPartsHub.Controllers
             }
 
             var tblColor = await _context.TblColors
-                .Include(t => t.Item)
+               
                 .FirstOrDefaultAsync(m => m.ColorId == id);
             if (tblColor == null)
             {

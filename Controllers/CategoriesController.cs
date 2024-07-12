@@ -9,20 +9,22 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class CategoriesController : Controller
     {
         private readonly AutoPartsHubContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public CategoriesController(AutoPartsHubContext context)
+        public CategoriesController(AutoPartsHubContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblCategories.Where(x => x.MDelete == false || x.MDelete == null).ToListAsync());
+            return View(await _context.TblCategories.ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -54,10 +56,47 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,CategoryName,CategoryTital,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
+        public async Task<IActionResult> Create([Bind("CategoryId,CategoryName,CategoryImageFile,CategoryTitle,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
         {
             if (ModelState.IsValid)
             {
+
+                if (tblCategory.CategoryImageFile != null)
+                {
+
+                    var fileName = Path.GetFileNameWithoutExtension(tblCategory.CategoryImageFile.FileName);
+                    var fileExtension = Path.GetExtension(tblCategory.CategoryImageFile.FileName);
+                    var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
+
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
+                    string UploadedFolder = $"/Uploadimages/CategoryImages/";
+
+
+
+
+                    var basePath = Path.Combine(wwwRootPath + UploadedFolder);
+
+
+
+                    bool basePathExists = System.IO.Directory.Exists(basePath);
+
+
+
+                    if (!basePathExists) Directory.CreateDirectory(basePath);
+
+
+
+                    var filePath = Path.Combine(basePath, Image);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        tblCategory.CategoryImageFile.CopyTo(stream);
+
+
+                    }
+
+                    string imageURL = UploadedFolder + Image;
+                    tblCategory.CategoryImage = imageURL;
+                }
                 _context.Add(tblCategory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +125,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName,CategoryTital,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName,CategoryImageFile,CategoryTitle,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
         {
             if (id != tblCategory.CategoryId)
             {
@@ -97,6 +136,42 @@ namespace AutoPartsHub.Controllers
             {
                 try
                 {
+                    if (tblCategory.CategoryImageFile != null)
+                    {
+
+                        var fileName = Path.GetFileNameWithoutExtension(tblCategory.CategoryImageFile.FileName);
+                        var fileExtension = Path.GetExtension(tblCategory.CategoryImageFile.FileName);
+                        var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
+
+                        string wwwRootPath = _hostEnvironment.WebRootPath;
+                        string UploadedFolder = $"/Uploadimages/CategoryImages/";
+
+
+
+
+                        var basePath = Path.Combine(wwwRootPath + UploadedFolder);
+
+
+
+                        bool basePathExists = System.IO.Directory.Exists(basePath);
+
+
+
+                        if (!basePathExists) Directory.CreateDirectory(basePath);
+
+
+
+                        var filePath = Path.Combine(basePath, Image);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            tblCategory.CategoryImageFile.CopyTo(stream);
+
+
+                        }
+
+                        string imageURL = UploadedFolder + Image;
+                        tblCategory.CategoryImage = imageURL;
+                    }
                     _context.Update(tblCategory);
                     await _context.SaveChangesAsync();
                 }

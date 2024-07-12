@@ -33,9 +33,9 @@
                                 <input asp-for="PolicyAmount" class="form-control" />
                                 <span asp-validation-for="PolicyAmount" class="text-danger"></span>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
                                 <label asp-for="IsLifeTime" class="control-label">Is Life Time</label>
-                                <input asp-for="IsLifeTime" class="form-control" />
+                                <input asp-for="IsLifeTime" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
                                 <span asp-validation-for="IsLifeTime" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mt-4">

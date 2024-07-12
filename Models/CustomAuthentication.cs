@@ -7,15 +7,15 @@ namespace AutoPartsHub.Models
     {
        
 
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            if (!context.HttpContext.User.Identity.IsAuthenticated)
-            {
-                // Redirect unauthenticated users to the forbidden page
-                context.Result = new RedirectToActionResult("ForbiddenPage", "Login", null);
-            }
-            base.OnActionExecuting(context);
-        }
+        //public override void OnActionExecuting(ActionExecutingContext context)
+        //{
+        //    if (!context.HttpContext.User.Identity.IsAuthenticated)
+        //    {
+        //        // Redirect unauthenticated users to the forbidden page
+        //        context.Result = new RedirectToActionResult("ForbiddenPage", "Login", null);
+        //    }
+        //    base.OnActionExecuting(context);
+        //}
    
 }
 }

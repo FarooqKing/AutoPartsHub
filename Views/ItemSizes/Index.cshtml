@@ -23,52 +23,57 @@
                 <div class="table-responsive">
                     <table class="table table-responsive-md">
 
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SizeName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SizeExtraAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDefaultSize)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Item)
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SizeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SizeExtraAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDefaultSize)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.ItemId)
-            </td>
-            <td style="display:flex;margin-left: 30px !important ">
-                <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.SizeId"><i class="fa fa-edit"></i></a> 
-           <form asp-action="Delete" method="post" class="deleteForm">
-                                            <input type="hidden" name="id" value="@item.SizeId" asp-for="@item.SizeId" />
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    Item
+                                </th>
+                                <th>
+                                    Size
+                                </th>
+                                <th>
+                                    Size Price
+                                </th>
+                                <th>
+                                    isDefault
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Item.ItemName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Size.SizeName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SizePrice)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsDefault)
+                                    </td>
+                                    <td style="display:flex;margin-left: 30px !important ">
+                                        <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.ItemSizeId"><i class="fa fa-edit"></i></a>
+                                        <form asp-action="Delete" method="post" class="deleteForm">
+                                            <input type="hidden" name="id" value="@item.ItemSizeId" asp-for="@item.ItemSizeId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form> </td>
-        </tr>
-}
-    </tbody>
-</table>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

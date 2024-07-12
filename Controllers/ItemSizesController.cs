@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
     public class ItemSizesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,8 +21,8 @@ namespace AutoPartsHub.Controllers
         // GET: ItemSizes
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblItemSizes.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
-            return View(await AutoPartsHubContext.ToListAsync());
+            var autoPartsHubContext = _context.TblItemSizes.Include(t => t.Item).Include(t => t.Size);
+            return View(await autoPartsHubContext.ToListAsync());
         }
 
         // GET: ItemSizes/Details/5
@@ -35,8 +34,9 @@ namespace AutoPartsHub.Controllers
             }
 
             var tblItemSize = await _context.TblItemSizes
-                .Include(t => t.Item)
-                .FirstOrDefaultAsync(m => m.SizeId == id);
+                .Include(t => t.Item).Where(a => a.MDelete == null || a.MDelete == false)
+                .Include(t => t.Size).Where(a => a.MDelete == null || a.MDelete == false)
+                .FirstOrDefaultAsync(m => m.ItemSizeId == id);
             if (tblItemSize == null)
             {
                 return NotFound();
@@ -49,6 +49,7 @@ namespace AutoPartsHub.Controllers
         public IActionResult Create()
         {
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+            ViewData["SizeId"] = new SelectList(_context.TblSizes, "SizeId", "SizeName");
             return View();
         }
 
@@ -57,7 +58,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SizeId,ItemId,ItemName,SizeName,SizeExtraAmount,IsDefaultSize,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
+        public async Task<IActionResult> Create([Bind("ItemSizeId,SizeId,ItemId,SizePrice,IsDefault,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +67,7 @@ namespace AutoPartsHub.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemSize.ItemId);
+            ViewData["SizeId"] = new SelectList(_context.TblSizes, "SizeId", "SizeName", tblItemSize.SizeId);
             return View(tblItemSize);
         }
 
@@ -83,6 +85,7 @@ namespace AutoPartsHub.Controllers
                 return NotFound();
             }
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemSize.ItemId);
+            ViewData["SizeId"] = new SelectList(_context.TblSizes, "SizeId", "SizeName", tblItemSize.SizeId);
             return View(tblItemSize);
         }
 
@@ -91,9 +94,9 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SizeId,ItemName,ItemId,SizeName,SizeExtraAmount,IsDefaultSize,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemSizeId,SizeId,ItemId,SizePrice,IsDefault,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemSize tblItemSize)
         {
-            if (id != tblItemSize.SizeId)
+            if (id != tblItemSize.ItemSizeId)
             {
                 return NotFound();
             }
@@ -107,7 +110,7 @@ namespace AutoPartsHub.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TblItemSizeExists(tblItemSize.SizeId))
+                    if (!TblItemSizeExists(tblItemSize.ItemSizeId))
                     {
                         return NotFound();
                     }
@@ -119,6 +122,7 @@ namespace AutoPartsHub.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemSize.ItemId);
+            ViewData["SizeId"] = new SelectList(_context.TblSizes, "SizeId", "SizeName", tblItemSize.SizeId);
             return View(tblItemSize);
         }
 
@@ -132,7 +136,8 @@ namespace AutoPartsHub.Controllers
 
             var tblItemSize = await _context.TblItemSizes
                 .Include(t => t.Item)
-                .FirstOrDefaultAsync(m => m.SizeId == id);
+                .Include(t => t.Size)
+                .FirstOrDefaultAsync(m => m.ItemSizeId == id);
             if (tblItemSize == null)
             {
                 return NotFound();
@@ -149,17 +154,16 @@ namespace AutoPartsHub.Controllers
             var tblItemSize = await _context.TblItemSizes.FindAsync(id);
             if (tblItemSize != null)
             {
-                tblItemSize.MDelete = true;
-                _context.TblItemSizes.Update(tblItemSize);
-            await _context.SaveChangesAsync();
+                _context.TblItemSizes.Remove(tblItemSize);
             }
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TblItemSizeExists(int id)
         {
-            return _context.TblItemSizes.Any(e => e.SizeId == id);
+            return _context.TblItemSizes.Any(e => e.ItemSizeId == id);
         }
     }
 }

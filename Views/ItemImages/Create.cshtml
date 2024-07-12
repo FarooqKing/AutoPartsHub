@@ -35,23 +35,27 @@
                     <span asp-validation-for="ItemImageName" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                                <label asp-for="ThumbailImage" class="control-label">Thumbail Image</label>
-                    <input asp-for="ThumbailImage" class="form-control" />
-                    <span asp-validation-for="ThumbailImage" class="text-danger"></span>
+                                <label asp-for="ThumbnailImage" class="control-label">Thumbail Image</label>
+                    <input asp-for="ThumbnailImage" class="form-control" />
+                    <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mt-4">
                                 <label asp-for="NormalImage" class="control-label">Normal Image</label>
                     <input asp-for="NormalImage" class="form-control" />
                     <span asp-validation-for="NormalImage" class="text-danger"></span>
                 </div>
-                <div class="col-md-6 mt-4">
+              
+                            <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
                                 <label asp-for="IsDefault" class="control-label">Is Default</label>
-                    <input asp-for="IsDefault" class="form-control" />
-                    <span asp-validation-for="IsDefault" class="text-danger"></span>
-                </div>
+                                <input asp-for="IsDefault" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
+                                <span asp-validation-for="IsDefault" class="text-danger"></span>
+                            </div>
                 <div class="col-md-6 mt-4">
                                 <label asp-for="ItemId" class="control-label">Item Id</label>
-                    <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId"></select>
+                    <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId">
+                                    <option>----- Select Item -----</option>
+
+                    </select>
                 </div>
 
                 <div class="col-md-6 mt-4">

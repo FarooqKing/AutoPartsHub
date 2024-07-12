@@ -25,7 +25,7 @@ public partial class TblOrdersMain
 
     public string? Email { get; set; }
 
-    public int PhoneNo { get; set; }
+    public string PhoneNo { get; set; } = null!;
 
     public int? CountryId { get; set; }
 
@@ -39,9 +39,9 @@ public partial class TblOrdersMain
 
     public DateTime? DeliverDays { get; set; }
 
-    public int? PostelCode { get; set; }
+    public string? PostelCode { get; set; }
 
-    public int? StatesId { get; set; }
+    public int? StatusId { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -59,7 +59,7 @@ public partial class TblOrdersMain
 
     public virtual TblProvince? Province { get; set; }
 
-    public virtual TblStatus? States { get; set; }
+    public virtual TblStatus? Status { get; set; }
 
     public virtual TblUser User { get; set; } = null!;
 }

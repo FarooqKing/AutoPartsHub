@@ -6,23 +6,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AutoPartsHub.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
+    //public class ItemsController : Controller
+    //{
+    //    private readonly AutoPartsHubContext _context;
+    //    private readonly IWebHostEnvironment _hostEnvironment;
+    //    public ItemsController(AutoPartsHubContext context, IWebHostEnvironment hostEnvironment)
+    //    {
+    //        _context = context;
+    //        _hostEnvironment = hostEnvironment;
+    //    }
     public class ItemsController : Controller
     {
         private readonly AutoPartsHubContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ItemsController(AutoPartsHubContext context)
+        public ItemsController(AutoPartsHubContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Items
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext =await  _context.TblItems.Include(t => t.Brand).Where(x => x.MDelete == false || x.MDelete == null).ToListAsync();
+            var AutoPartsHubContext =await  _context.TblItems.Include(t => t.Brand).ToListAsync();
             return View( AutoPartsHubContext);
         }
 
@@ -57,10 +69,46 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,ItemSlugs,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem)
+        public async Task<IActionResult> Create([Bind("ItemId,ItemSlugs,DefaultImageFile,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem)
         {
             if (ModelState.IsValid)
             {
+                if (tblItem.DefaultImageFile != null)
+                {
+
+                    var fileName = Path.GetFileNameWithoutExtension(tblItem.DefaultImageFile.FileName);
+                    var fileExtension = Path.GetExtension(tblItem.DefaultImageFile.FileName);
+                    var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
+
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
+                    string UploadedFolder = $"/Uploadimages/CategoryImages/";
+
+
+
+
+                    var basePath = Path.Combine(wwwRootPath + UploadedFolder);
+
+
+
+                    bool basePathExists = System.IO.Directory.Exists(basePath);
+
+
+
+                    if (!basePathExists) Directory.CreateDirectory(basePath);
+
+
+
+                    var filePath = Path.Combine(basePath, Image);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        tblItem.DefaultImageFile.CopyTo(stream);
+
+
+                    }
+
+                    string imageURL = UploadedFolder + Image;
+                    tblItem.DefaultImageUrl = imageURL;
+                }
                 _context.Add(tblItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -91,7 +139,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,ItemSlugs,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemId,ItemSlugs,DefaultImageFile,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem)
         {
             if (id != tblItem.ItemId)
             {
@@ -102,6 +150,42 @@ namespace AutoPartsHub.Controllers
             {
                 try
                 {
+                    if (tblItem.DefaultImageFile != null)
+                    {
+
+                        var fileName = Path.GetFileNameWithoutExtension(tblItem.DefaultImageFile.FileName);
+                        var fileExtension = Path.GetExtension(tblItem.DefaultImageFile.FileName);
+                        var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
+
+                        string wwwRootPath = _hostEnvironment.WebRootPath;
+                        string UploadedFolder = $"/Uploadimages/CategoryImages/";
+
+
+
+
+                        var basePath = Path.Combine(wwwRootPath + UploadedFolder);
+
+
+
+                        bool basePathExists = System.IO.Directory.Exists(basePath);
+
+
+
+                        if (!basePathExists) Directory.CreateDirectory(basePath);
+
+
+
+                        var filePath = Path.Combine(basePath, Image);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            tblItem.DefaultImageFile.CopyTo(stream);
+
+
+                        }
+
+                        string imageURL = UploadedFolder + Image;
+                        tblItem.DefaultImageUrl = imageURL;
+                    }
                     _context.Update(tblItem);
                     await _context.SaveChangesAsync();
                 }

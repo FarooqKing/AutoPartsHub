@@ -11,7 +11,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class BrandsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -27,7 +27,7 @@ namespace AutoPartsHub.Controllers
         public async Task<IActionResult> Index()
         {
             var brands = await _context.TblBrands
-            .Where(b => b.MDelete != null && b.MDelete == false)
+           
           .ToListAsync();
             return View(brands);
         }

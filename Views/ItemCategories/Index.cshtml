@@ -47,11 +47,11 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemId)
+                @Html.DisplayFor(modelItem => item.Item.ItemName)
             </td>
          
             <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryId)
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td style="display:flex;margin-inline-start: 0px !important">
                 <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ItemCategoryId"><i class="fa fa-edit"></i></a> 

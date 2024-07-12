@@ -9,11 +9,11 @@ public partial class TblItemImage
 
     public string ItemImageName { get; set; } = null!;
 
-    public string? ThumbailImage { get; set; }
+    public string? ThumbnailImage { get; set; }
 
     public string? NormalImage { get; set; }
 
-    public bool? IsDefault { get; set; }
+    public Boolean IsDefault { get; set; }
 
     public int? ItemId { get; set; }
 

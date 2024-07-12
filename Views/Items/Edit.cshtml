@@ -25,75 +25,75 @@
                 <div class="form-validation">
 
 
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ItemId" />
-            <div class="form-group row">
-                <div class="col-md-6">
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="ItemId" />
+                        <div class="form-group row">
+                            <div class="col-md-6">
                                 <label asp-for="ItemSlugs" class="control-label">Item Slugs</label>
-                    <input asp-for="ItemSlugs" class="form-control" />
-                    <span asp-validation-for="ItemSlugs" class="text-danger"></span>
-                </div>
-                <div class="col-md-6">
+                                <input asp-for="ItemSlugs" class="form-control" />
+                                <span asp-validation-for="ItemSlugs" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
                                 <label asp-for="ItemName" class="control-label">Item Name</label>
-                    <input asp-for="ItemName" class="form-control" />
-                    <span asp-validation-for="ItemName" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
+                                <input asp-for="ItemName" class="form-control" />
+                                <span asp-validation-for="ItemName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4">
                                 <label asp-for="ItemPrice" class="control-label">Item Price</label>
-                    <input asp-for="ItemPrice" class="form-control" />
-                    <span asp-validation-for="ItemPrice" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
-                    <label asp-for="Discount" class="control-label"></label>
-                    <input asp-for="Discount" class="form-control" />
-                    <span asp-validation-for="Discount" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
-                                <label asp-for="IsFeature" class="control-label">Is Feature</label>
-                    <input asp-for="IsFeature" class="form-control" />
-                    <span asp-validation-for="IsFeature" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
+                                <input asp-for="ItemPrice" class="form-control" />
+                                <span asp-validation-for="ItemPrice" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4">
+                                <label asp-for="Discount" class="control-label"></label>
+                                <input asp-for="Discount" class="form-control" />
+                                <span asp-validation-for="Discount" class="text-danger"></span>
+                            </div>
+                        
+                            <div class="col-md-6 mt-4">
                                 <label asp-for="BrandId" class="control-label">Brand Id</label>
-                    <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
-                    <span asp-validation-for="BrandId" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
-                    <label asp-for="Sku" class="control-label"></label>
-                    <input asp-for="Sku" class="form-control" />
-                    <span asp-validation-for="Sku" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
-                                <label asp-for="DefaultImageUrl" class="control-label">Default Image Url</label>
-                    <input asp-for="DefaultImageUrl" class="form-control" />
-                    <span asp-validation-for="DefaultImageUrl" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
+                                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
+                                <span asp-validation-for="BrandId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4">
+                                <label asp-for="Sku" class="control-label"></label>
+                                <input asp-for="Sku" class="form-control" />
+                                <span asp-validation-for="Sku" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4">
+                                <label asp-for="DefaultImageFile" class="control-label">Default Image Url</label>
+                                <input asp-for="DefaultImageFile" type="file" class="form-control" />
+                                <span asp-validation-for="DefaultImageFile" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4">
                                 <label asp-for="ShortDescription" class="control-label">Short Description</label>
-                    <input asp-for="ShortDescription" class="form-control" />
-                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
-                </div>
-                <div class="col-md-6 mt-4">
+                                <input asp-for="ShortDescription" class="form-control" />
+                                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4">
                                 <label asp-for="LongDescription" class="control-label">Long Description</label>
-                    <input asp-for="LongDescription" class="form-control" />
-                    <span asp-validation-for="LongDescription" class="text-danger"></span>
-                </div>
+                                <input asp-for="LongDescription" class="form-control" />
+                                <span asp-validation-for="LongDescription" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
+                                <label asp-for="IsFeature" class="control-label">Is Feature</label>
+                                <input asp-for="IsFeature" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
+                                <span asp-validation-for="IsFeature" class="text-danger"></span>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-12 mt-4">
 
-                <div class="form-group row">
-                    <div class="col-md-12 mt-4">
-                        
-                        <input type="submit" value="Save" class="btn btn-success btnf-r " />
-                            <a asp-action="Index" class="btn btn-warning btnf-r" style="margin-right:2px !important">Back to List</a>
-                        
-                    </div>
+                                    <input type="submit" value="Save" class="btn btn-success btnf-r " />
+                                    <a asp-action="Index" class="btn btn-warning btnf-r" style="margin-right:2px !important">Back to List</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-             </div>
-        </form>
+            </div>
+        </div>
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
+</div>
 
 

@@ -32,18 +32,11 @@
 
                         <thead>
                             <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Item.ItemName)
-                                </th>
+                             
                                 <th>
                                     @Html.DisplayNameFor(model => model.ColorName)
                                 </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ColorExtraAmount)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IsDefaultColor)
-                                </th>
+                             
                               
                                 <th>
                                     Actions
@@ -54,18 +47,11 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Item.ItemName)
-                                    </td>
+                              
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ColorName)
                                     </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ColorExtraAmount)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IsDefaultColor)
-                                    </td>
+                                
                                  
                                       <td style="display: flex;margin-inline-start:0px !important">
  

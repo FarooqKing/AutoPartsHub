@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoPartsHub.Models;
 
@@ -14,6 +15,8 @@ public partial class TblCategory
     public string? CategoryDescription { get; set; }
 
     public string? CategoryImage { get; set; }
+    [NotMapped]
+    public IFormFile CategoryImageFile { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 

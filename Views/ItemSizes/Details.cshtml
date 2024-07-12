@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <h1>Details</h1>
@@ -12,22 +11,16 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SizeName)
+            @Html.DisplayNameFor(model => model.SizePrice)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SizeName)
+            @Html.DisplayFor(model => model.SizePrice)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SizeExtraAmount)
+            @Html.DisplayNameFor(model => model.IsDefault)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SizeExtraAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDefaultSize)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDefaultSize)
+            @Html.DisplayFor(model => model.IsDefault)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -65,9 +58,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Item.ItemId)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Size.SizeId)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.SizeId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.ItemSizeId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

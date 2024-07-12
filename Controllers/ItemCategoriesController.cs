@@ -9,7 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class ItemCategoriesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +22,7 @@ namespace AutoPartsHub.Controllers
         // GET: ItemCategories
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblItemCategories.Include(t => t.Category).Where(x => x.MDelete == false || x.MDelete == null);
+            var AutoPartsHubContext = _context.TblItemCategories.Include(t => t.Category);
             return View(await AutoPartsHubContext.ToListAsync());
         }
 
@@ -48,7 +48,9 @@ namespace AutoPartsHub.Controllers
         // GET: ItemCategories/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName");
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+
             return View();
         }
 
@@ -65,7 +67,9 @@ namespace AutoPartsHub.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryId", tblItemCategory.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName", tblItemCategory.CategoryId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemCategory.ItemId);
+
             return View(tblItemCategory);
         }
 
@@ -82,7 +86,9 @@ namespace AutoPartsHub.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryId", tblItemCategory.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName", tblItemCategory.CategoryId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemCategory.ItemId);
+
             return View(tblItemCategory);
         }
 
@@ -118,7 +124,8 @@ namespace AutoPartsHub.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryId", tblItemCategory.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName", tblItemCategory.CategoryId);
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemCategory.ItemId);
             return View(tblItemCategory);
         }
 

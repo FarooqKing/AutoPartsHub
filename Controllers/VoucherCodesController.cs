@@ -9,7 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class VoucherCodesController : Controller
     {
         private readonly AutoPartsHubContext _context;

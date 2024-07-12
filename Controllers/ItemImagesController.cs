@@ -9,7 +9,7 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    [CustomAuthentication]
+    //[CustomAuthentication]
     public class ItemImagesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +22,7 @@ namespace AutoPartsHub.Controllers
         // GET: ItemImages
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblItemImages.Include(t => t.Item).Where(x => x.MDelete == false || x.MDelete == null);
+            var AutoPartsHubContext = _context.TblItemImages.Include(t => t.Item);
             return View(await AutoPartsHubContext.ToListAsync());
         }
 
@@ -57,7 +57,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemImageId,ItemImageName,ThumbailImage,NormalImage,IsDefault,ItemId,ItemName,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
+        public async Task<IActionResult> Create([Bind("ItemImageId,ItemImageName,ThumbnailImage,NormalImage,IsDefault,ItemId,ItemName,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemImageId,ItemName,ItemImageName,ThumbailImage,NormalImage,IsDefault,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemImageId,ItemName,ItemImageName,ThumbnailImage,NormalImage,IsDefault,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete,BanerImage")] TblItemImage tblItemImage)
         {
             if (id != tblItemImage.ItemImageId)
             {

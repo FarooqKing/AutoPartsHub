@@ -40,10 +40,10 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Item.ItemId)
+                                        @Html.DisplayFor(modelItem => item.Item.ItemName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Tag.TagId)
+                                        @Html.DisplayFor(modelItem => item.Tag.TagName)
                                     </td>
                                     <td style="display:flex;margin-inline:0px !important">
                                         <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ItemTagId"><i class="fa fa-edit"></i></a> 

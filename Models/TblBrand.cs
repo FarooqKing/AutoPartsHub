@@ -17,6 +17,8 @@ public partial class TblBrand
     public string? BrandDescription { get; set; }
 
     public string? BrandImage { get; set; }
+    [NotMapped]
+    public IFormFile BrandImageFile { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -27,7 +29,6 @@ public partial class TblBrand
     public int? UpdatedBy { get; set; }
 
     public bool MDelete { get; set; }
-    [NotMapped]
-    public IFormFile BrandImageFile { get; set; }
+
     public virtual ICollection<TblItem> TblItems { get; set; } = new List<TblItem>();
 }

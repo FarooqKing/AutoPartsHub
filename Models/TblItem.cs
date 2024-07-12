@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoPartsHub.Models;
 
@@ -15,13 +16,15 @@ public partial class TblItem
 
     public decimal? Discount { get; set; }
 
-    public bool? IsFeature { get; set; }
+    public Boolean IsFeature { get; set; }
 
     public int? BrandId { get; set; }
 
     public string? Sku { get; set; }
 
     public string? DefaultImageUrl { get; set; }
+    [NotMapped]
+    public IFormFile? DefaultImageFile { get; set; }
 
     public string? ShortDescription { get; set; }
 
@@ -39,7 +42,7 @@ public partial class TblItem
 
     public virtual TblBrand? Brand { get; set; }
 
-    public virtual ICollection<TblColor> TblColors { get; set; } = new List<TblColor>();
+    public virtual ICollection<TblItemColor> TblItemColors { get; set; } = new List<TblItemColor>();
 
     public virtual ICollection<TblItemImage> TblItemImages { get; set; } = new List<TblItemImage>();
 
