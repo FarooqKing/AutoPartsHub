@@ -16,8 +16,7 @@ public partial class TblCategory
 
     public string? CategoryImage { get; set; }
     [NotMapped]
-    public IFormFile CategoryImageFile { get; set; }
-
+    public IFormFile? CategoryImageFile { get; set; }
     public DateTime? CreatedAt { get; set; }
 
     public int? CreatedBy { get; set; }

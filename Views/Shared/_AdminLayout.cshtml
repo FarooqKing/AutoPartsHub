@@ -66,8 +66,7 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-			<a asp-controller="Home" asp-action="Index"
-				class="brand-logo">
+            <a href="/" class="brand-logo">
                 <img src="/adminassets/images/PartsLogo.png" style="width:100% " alt="">
 		@* 		<img class="logo-compact" src="/adminassets/images/logo-text.png" alt="">
 				<img class="brand-title" src="/adminassets/images/logo-text.png" alt=""> *@
@@ -733,8 +732,8 @@
 						</a>
 					</li>
                     <li>
-						<a class=" ai-icon" asp-controller="Users" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+						<a class=" ai-icon" href="/Users/Index" aria-expanded="false">
+							<i class="fa fa-users"></i>
 							<span class="nav-text">Users</span>
 						</a>
                        
@@ -742,7 +741,7 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller="Roles" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-user"></i>
 							<span class="nav-text">Role</span>
 						</a>
     
@@ -752,15 +751,8 @@
 				
 					<li>
 						<a class=" ai-icon" asp-controller="Colors" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-eyedropper"></i>
 							<span class="nav-text">Colors</span>
-						</a>
-
-					</li>
-					<li>
-						<a class=" ai-icon" asp-controller="Sizes" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
-							<span class="nav-text">Sizes</span>
 						</a>
 
 					</li>
@@ -770,31 +762,25 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller="Items" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-cart-plus"></i>
 							<span class="nav-text">Items</span>
 						</a>
 
 					</li>
 
 
-				@* 	<li>
+					<li>
 						<a class=" ai-icon" asp-controller="ItemCategories" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
-							<span class="nav-text">ItemCategories</span>
+							<i class="fa fa-cubes"></i>
+							<span class="nav-text">Item Categories</span>
 						</a>
 
-					</li> *@
+					</li>
 
 					<li>
 						<a class=" ai-icon" asp-controller="ItemImages" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-file-image-o"></i>
 							<span class="nav-text">Item Images</span>
-						</a>
-					</li>
-					<li>
-						<a class=" ai-icon" asp-controller="ItemColors" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
-							<span class="nav-text">Item Colors</span>
 						</a>
 
 					</li>
@@ -804,15 +790,22 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller="ItemSizes" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-sort"></i>
 							<span class="nav-text">Item Sizes</span>
 						</a>
 
 					</li>
 					<li>
-						<a class=" ai-icon" asp-controller="ItemCategories" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
-							<span class="nav-text">Item Category</span>
+						<a class=" ai-icon" asp-controller="ItemColors" asp-action="Index" aria-expanded="false">
+							<i class="fa fa-sort"></i>
+							<span class="nav-text">Item Colors</span>
+						</a>
+
+					</li>
+					<li>
+						<a class=" ai-icon" asp-controller="Sizes" asp-action="Index" aria-expanded="false">
+							<i class="fa fa-sort"></i>
+							<span class="nav-text">Sizes</span>
 						</a>
 
 					</li>
@@ -820,7 +813,7 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller="ItemTags" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-tags"></i>
 							<span class="nav-text">Item Tags</span>
 						</a>
 
@@ -834,8 +827,8 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller="ShippingPolicies" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
-							<span class="nav-text">Shipping<br />Policies</span>
+							<i class="fa fa-truck"></i>
+							<span class="nav-text">Shipping Policies</span>
 						</a>
 
 					</li>
@@ -854,7 +847,7 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller= "Tags" asp-action="Index"  aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-tag "></i>
 							<span class="nav-text">Tags</span>
 						</a>
 
@@ -863,8 +856,8 @@
 
 					<li>
 						<a class=" ai-icon" asp-controller="VoucherCodes" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
-							<span class="nav-text">Voucher Codes</span>
+							<i class="fa fa-gift"></i>
+							<span class="nav-text">VoucherCodes</span>
 						</a>
 
 					</li>
@@ -873,7 +866,7 @@
 			
 
 					   <li><a class=" ai-icon"asp-controller="Categories" asp-action="Index" aria-expanded="false">
-							<i class="flaticon-381-notepad"></i>
+							<i class="fa fa-server"></i>
 							<span class="nav-text">Categories</span>
 						</a>
                        

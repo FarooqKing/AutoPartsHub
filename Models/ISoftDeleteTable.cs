@@ -4,7 +4,7 @@
     {
         DateTime? UpdatedAt { get; set; }
         int? UpdatedBy { get; set; }
-        bool? mDelete { get; set; }
+        bool MDelete { get; set; }
     }
 
 

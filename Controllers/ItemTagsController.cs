@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class ItemTagsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,8 +21,8 @@ namespace AutoPartsHub.Controllers
         // GET: ItemTags
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblItemTags.Include(t => t.Item).Include(t => t.Tag);
-            return View(await AutoPartsHubContext.ToListAsync());
+            var autoPartsHubContext = _context.TblItemTags.Include(t => t.Item).Include(t => t.Tag);
+            return View(await autoPartsHubContext.ToListAsync());
         }
 
         // GET: ItemTags/Details/5
@@ -59,7 +58,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemTagId,TagId,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemTag tblItemTag)
+        public async Task<IActionResult> Create([Bind("ItemTagId,TagId,TagName,ItemName,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemTag tblItemTag)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +94,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemTagId,TagId,ItemId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemTag tblItemTag)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemTagId,TagId,TagName,ItemId,ItemName,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItemTag tblItemTag)
         {
             if (id != tblItemTag.ItemTagId)
             {

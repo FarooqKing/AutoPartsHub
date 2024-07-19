@@ -30,20 +30,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ItemCategoryId" />
             <div class="form-group row">
-                            <div class="col-md-6 mt-4">
-                                <label asp-for="CategoryId" class="control-label">Category</label>
-                                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
-                                    <option>----- Select Category -----</option>
-
-                                </select>
-                            </div>
-                            <div class="col-md-6 mt-4">
-                                <label asp-for="ItemId" class="control-label">Item</label>
-                                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId">
-                                    <option>----- Select Item -----</option>
-
-                                </select>
-                            </div>
+            <div class="col-md-6">
+                                <label asp-for="CategoryId" class="control-label">Category Id</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                                <label asp-for="ItemId" class="control-label">Item Id</label>
+                <input asp-for="ItemId" class="form-control" />
+                <span asp-validation-for="ItemId" class="text-danger"></span>
+            </div>
 
             <div class="form-group row">
                 <div class="col-md-12">

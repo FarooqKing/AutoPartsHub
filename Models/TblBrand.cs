@@ -18,8 +18,7 @@ public partial class TblBrand
 
     public string? BrandImage { get; set; }
     [NotMapped]
-    public IFormFile BrandImageFile { get; set; }
-
+    public IFormFile? BrandImageFile {get ; set; } 
     public DateTime? CreatedAt { get; set; }
 
     public int? CreatedBy { get; set; }

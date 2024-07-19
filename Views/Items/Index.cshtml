@@ -14,105 +14,110 @@
     <div class="col-12">
 
         <div class="card">
-            <div class="card-header bg-theme ">
-                <h4 class="card-title text-white">Brands</h4>
+            <div class="card-header bg-theme">
+                <h4 class="card-title text-white">Items</h4>
                 <button type="button" class="btn bg-white" id="CreateUser">
 
-                    <a asp-action="Create" class=" text-theme" style="color:#fff">Create New</a>
+                    <a asp-action="Create" class="text-theme" style="color:#fff">Create New</a>
                 </button>
 
             </div>
 
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-responsive-md">
+                        <thead>
+                            <tr>
+                                <th>Images</th>
+                                <th>
+                                @Html.DisplayNameFor(model => model.ItemSlugs)
+                                </th>
 
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemSlugs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Discount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsFeature)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sku)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DefaultImageUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShortDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LongDescription)
-            </th>
+                                <th>
+                                    Item Name
+                                </th>
+                                <th>
+                                    Item Price
+                                </th>
+                                <th>
+                                    Discount
+                                </th>
+                                <th>
+                                    IsFeature
+                                </th>
+                                <th>
+                                    Sku
+                                </th>
 
-            
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemSlugs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Discount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsFeature)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sku)
-            </td>
-            <td>
-                                        <img src="@Html.DisplayFor(modelItem => item.DefaultImageUrl)" alt="Item Image" class="w-75 img-responsive" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShortDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LongDescription)
-            </td>
-       
-            
-            <td>
-                @if(item.Brand is not null){
-                @Html.DisplayFor(modelItem => item.Brand!.BrandName)
-                }
-            </td>
-            <td style="display:flex;margin-left:30px !important">
-                        <a asp-action="Edit" class="btn btn-sm m-2 btn-primary " asp-route-id="@item.ItemId"><i class="fa fa-edit"></i></a>
+                                <th>
+                                    Short Description
+                                </th>
+                                <th>
+                                    Long Description
+                                </th>
 
-                        <form asp-action="Delete" method="post" class="deleteForm">
+                                <th>
+                                    Brand
+                                </th>
+
+                                <th>
+                                     Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                        <td>
+                                            <img src="@Html.DisplayFor(modelItem => item.TblItemImages.FirstOrDefault(x=>x.IsDefault).NormalImage)" alt="ItemImage" class="w-100 img-responsive" />
+                                        </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemSlugs)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemPrice)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Discount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsFeature)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Sku)
+                                    </td>
+                                    
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ShortDescription)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LongDescription)
+                                    </td>
+
+
+                                    <td>
+                                     
+                                            @Html.DisplayFor(modelItem => item.Brand.BrandName)
+                                      
+                                    </td>
+                                    <td style="display:flex;margin-left:20px !important">
+                                        <a asp-action="ProductImages" class="btn btn-sm m-2 btn-warning" asp-route-id="@item.ItemId"><i class="fa fa-file "></i></a>
+
+                                        <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.ItemId"><i class="fa fa-edit"></i></a>
+
+                                        <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ItemId" asp-for="@item.ItemId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form></td>
-        </tr>
-}
-    </tbody>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>

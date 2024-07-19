@@ -36,7 +36,7 @@ namespace AutoPartsHub.Controllers
             var tblItemColor = await _context.TblItemColors
                 .Include(t => t.Color)
                 .Include(t => t.Item)
-                .FirstOrDefaultAsync(m => m.ItemColorId == id);
+                .FirstOrDefaultAsync(m => m.ColorId == id);
             if (tblItemColor == null)
             {
                 return NotFound();
@@ -58,7 +58,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemColorId,ItemId,ColorId,ColorPrice,IsDefault,CreatedAt,CreatedBy,UpdatedAt,Updatedby,MDelete")] TblItemColor tblItemColor)
+        public async Task<IActionResult> Create([Bind("ColorId,ItemId,ColorPrice,IsDefault,ItemColor,MDelete,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy")] TblItemColor tblItemColor)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemColorId,ItemId,ColorId,ColorPrice,IsDefault,CreatedAt,CreatedBy,UpdatedAt,Updatedby,MDelete")] TblItemColor tblItemColor)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemColorId,ItemId,ColorPrice,IsDefault,ColorId,MDelete,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy")] TblItemColor tblItemColor)
         {
             if (id != tblItemColor.ItemColorId)
             {
@@ -137,7 +137,7 @@ namespace AutoPartsHub.Controllers
             var tblItemColor = await _context.TblItemColors
                 .Include(t => t.Color)
                 .Include(t => t.Item)
-                .FirstOrDefaultAsync(m => m.ItemColorId == id);
+                .FirstOrDefaultAsync(m => m.ColorId == id);
             if (tblItemColor == null)
             {
                 return NotFound();
@@ -163,7 +163,7 @@ namespace AutoPartsHub.Controllers
 
         private bool TblItemColorExists(int id)
         {
-            return _context.TblItemColors.Any(e => e.ItemColorId == id);
+            return _context.TblItemColors.Any(e => e.ColorId == id);
         }
     }
 }

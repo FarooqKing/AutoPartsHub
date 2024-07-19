@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class ColorsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,8 +21,7 @@ namespace AutoPartsHub.Controllers
         // GET: Colors
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblColors;
-            return View(await AutoPartsHubContext.ToListAsync());
+            return View(await _context.TblColors.ToListAsync());
         }
 
         // GET: Colors/Details/5
@@ -35,7 +33,6 @@ namespace AutoPartsHub.Controllers
             }
 
             var tblColor = await _context.TblColors
-              
                 .FirstOrDefaultAsync(m => m.ColorId == id);
             if (tblColor == null)
             {
@@ -48,7 +45,6 @@ namespace AutoPartsHub.Controllers
         // GET: Colors/Create
         public IActionResult Create()
         {
-           
             return View();
         }
 
@@ -57,7 +53,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ColorId,ColorName")] TblColor tblColor)
+        public async Task<IActionResult> Create([Bind("ColorId,ColorName,CreatedAt,CreatedBy,UpdatedAt,UpdateBy,MDelete")] TblColor tblColor)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +63,6 @@ namespace AutoPartsHub.Controllers
             }
             return View(tblColor);
         }
-
-
 
         // GET: Colors/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -91,7 +85,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ColorId,ColorName")] TblColor tblColor)
+        public async Task<IActionResult> Edit(int id, [Bind("ColorId,ColorName,CreatedAt,CreatedBy,UpdatedAt,UpdateBy,MDelete")] TblColor tblColor)
         {
             if (id != tblColor.ColorId)
             {
@@ -130,7 +124,6 @@ namespace AutoPartsHub.Controllers
             }
 
             var tblColor = await _context.TblColors
-               
                 .FirstOrDefaultAsync(m => m.ColorId == id);
             if (tblColor == null)
             {
@@ -148,8 +141,8 @@ namespace AutoPartsHub.Controllers
             var tblColor = await _context.TblColors.FindAsync(id);
             if (tblColor != null)
             {
-                tblColor.MDelete = true;
-                _context.TblColors.Update(tblColor);
+                tblColor.MDelete=true;
+                _context.TblColors.Remove(tblColor);
             await _context.SaveChangesAsync();
             }
 

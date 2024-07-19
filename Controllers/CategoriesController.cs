@@ -9,22 +9,23 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class CategoriesController : Controller
     {
         private readonly AutoPartsHubContext _context;
-        private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+      
 
-        public CategoriesController(AutoPartsHubContext context, IWebHostEnvironment hostEnvironment)
+        public CategoriesController(AutoPartsHubContext context, IWebHostEnvironment webHostingEnvironment)
         {
             _context = context;
-            _hostEnvironment = hostEnvironment;
+            _webHostEnvironment = webHostingEnvironment;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblCategories.ToListAsync());
+            var category = await _context.TblCategories.Where(x => x.MDelete==false || x.MDelete==null).ToListAsync();
+            return View( category);
         }
 
         // GET: Categories/Details/5
@@ -56,11 +57,10 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,CategoryName,CategoryImageFile,CategoryTitle,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
+        public async Task<IActionResult> Create([Bind("CategoryId,CategoryImageFile,CategoryName,CategoryTitle,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
         {
             if (ModelState.IsValid)
             {
-
                 if (tblCategory.CategoryImageFile != null)
                 {
 
@@ -68,8 +68,8 @@ namespace AutoPartsHub.Controllers
                     var fileExtension = Path.GetExtension(tblCategory.CategoryImageFile.FileName);
                     var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
 
-                    string wwwRootPath = _hostEnvironment.WebRootPath;
-                    string UploadedFolder = $"/Uploadimages/CategoryImages/";
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string UploadedFolder = $"/Uploadimages/BrandImages/";
 
 
 
@@ -125,7 +125,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName,CategoryImageFile,CategoryTitle,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryImageFile,CategoryName,CategoryTitle,CategoryDescription,CategoryImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblCategory tblCategory)
         {
             if (id != tblCategory.CategoryId)
             {
@@ -143,8 +143,8 @@ namespace AutoPartsHub.Controllers
                         var fileExtension = Path.GetExtension(tblCategory.CategoryImageFile.FileName);
                         var Image = $"{fileName}_{Guid.NewGuid().ToString()}.{fileExtension}";
 
-                        string wwwRootPath = _hostEnvironment.WebRootPath;
-                        string UploadedFolder = $"/Uploadimages/CategoryImages/";
+                        string wwwRootPath = _webHostEnvironment.WebRootPath;
+                        string UploadedFolder = $"/Uploadimages/BrandImages/";
 
 
 

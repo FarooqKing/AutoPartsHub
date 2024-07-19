@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class ShippingPoliciesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +21,8 @@ namespace AutoPartsHub.Controllers
         // GET: ShippingPolicies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblShippingPolicies.Where(x=>x.MDelete==false||x.MDelete==null).ToListAsync());
+            var ShippingPolicies = await _context.TblShippingPolicies.Where(x => x.MDelete == false || x.MDelete == null).ToListAsync();
+            return View(ShippingPolicies);
         }
 
         // GET: ShippingPolicies/Details/5

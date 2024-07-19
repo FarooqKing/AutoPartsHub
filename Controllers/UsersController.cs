@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class UsersController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,9 +21,9 @@ namespace AutoPartsHub.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = await _context.TblUsers.Include(t => t.Roll)
-		  .ToListAsync(); 
-            return View(AutoPartsHubContext);
+            var autoPartsHubContext = await _context.TblUsers.Include(t => t.Roll).Where(b => b.MDelete == false || b.MDelete == null)
+          .ToListAsync();
+            return View(autoPartsHubContext);
         }
 
         // GET: Users/Details/5
@@ -92,7 +91,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,Email,PhoneNumber,Password,RollId")] TblUser tblUser)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,Email,PhoneNumber,Password,RollId,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblUser tblUser)
         {
             if (id != tblUser.UserId)
             {
@@ -150,9 +149,9 @@ namespace AutoPartsHub.Controllers
             var tblUser = await _context.TblUsers.FindAsync(id);
             if (tblUser != null)
             {
-                tblUser.MDelete = true;
+                tblUser.MDelete = true; // Set the soft delete flag to true
                 _context.TblUsers.Update(tblUser);
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));

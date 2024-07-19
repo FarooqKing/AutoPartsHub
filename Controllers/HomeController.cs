@@ -1,39 +1,51 @@
 using AutoPartsHub.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-
-		public HomeController(ILogger<HomeController> logger)
+        private readonly AutoPartsHubContext _context;
+		public HomeController(ILogger<HomeController> logger , AutoPartsHubContext context)
 		{
 			_logger = logger;
+            _context = context;
 		}
 
-		public IActionResult Index()
+	
+        public async Task<IActionResult> Index()
+        {
+            var items = await _context.TblItems.Include(x=>x.TblItemImages).ToListAsync();
+            return View(items);
+        }
+        [Route("privacy")]
+        public IActionResult Privacy()
 		{
 			return View();
 		}
-        [Route("privacy")]
-     
+
 		[Route("about")]
 		public IActionResult About()
 		{
 			return View();
 		}
-
-
         [Route("shop")]
-        public IActionResult Shop()
+        public async Task<IActionResult> Shop()
         {
-            return View();
+            var items = await _context.TblItems.Include(t => t.TblItemImages).ToListAsync();
+            return View(items);
         }
 
-
+        //public async Task<IActionResult> Shop()
+        //public IActionResult Shop()
+        //{
+        //    //var items = await _context.GetAllItemsAsync();
+        //    //return View(items);
+        //    return View();
+        //}
         [Route("blog")]
         public IActionResult Blog()
         {
@@ -55,10 +67,34 @@ namespace AutoPartsHub.Controllers
         }
 
 
-        [Route("ContectUS")]
-        public IActionResult ContectUS()
+        public IActionResult ContactUS()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ContactUS([Bind("ContectUsId,ContectUsName,ContectUsEmail,ContectUsPhoneNo,ContectUsSubject,ContectUsMassage,mDelete")] TblContectU tblContact)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(tblContact);
+                    await _context.SaveChangesAsync();
+
+                }
+
+
+                return View();
+            }
+            catch (Exception exp)
+            {
+
+                ViewBag.Message = exp.Message;
+                return View(tblContact);
+            }
+
         }
 
 

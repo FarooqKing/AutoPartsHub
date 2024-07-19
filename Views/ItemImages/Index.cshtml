@@ -31,26 +31,18 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ItemImageName)
+                                    Item Image Name
+
             </th>
+            
             <th>
-                @Html.DisplayNameFor(model => model.ThumbnailImage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NormalImage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDefault)
+                                    IsDefault
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.BanerImage)
+                                    Default Image File
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Item)
-            </th>
-            <th>
-                Actions
+                 Actions
             </th>
         </tr>
     </thead>
@@ -60,30 +52,22 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ItemImageName)
             </td>
+           
             <td>
-                @Html.DisplayFor(modelItem => item.ThumbnailImage)
-            </td>
+                                        @Html.DisplayFor(modelItem => item.IsDefault)
+            </td>   
             <td>
-                @Html.DisplayFor(modelItem => item.NormalImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDefault)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.BanerImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.ItemName)
-            </td>
+                                        <img src="@Html.DisplayFor(modelItem => item.Item.DefaultImageFile)" alt="DefaultImageFile" />
+                                    </td>
 
                                     <td style="display: flex;margin-inline-start:0px !important">
 
-                                        <a asp-action="Edit" class="btn btn-sm m-2  btn-primary" asp-route-id="@item.ItemImageId"><i class="fa fa-edit "></i></a>
-                                   <form asp-action="Delete" method="post" class="deleteForm">
+                                        <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.ItemImageId"><i class="fa fa-edit "></i></a>
+                                        <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ItemImageId" asp-for="@item.ItemImageId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form> </td>
+                                        </form>
+                                    </td>
         </tr>
 }
     </tbody>

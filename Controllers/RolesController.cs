@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class RolesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -17,12 +16,18 @@ namespace AutoPartsHub.Controllers
         public RolesController(AutoPartsHubContext context)
         {
             _context = context;
+
+         
         }
 
 	// GET: Roles
 	public async Task<IActionResult> Index()
         {
-            return View(await _context.TblRolls.Where(x=>x.MDelete==false||x.MDelete==null).ToListAsync());
+            var role = await _context.TblRolls
+           .Where(b => b.MDelete == false || b.MDelete == null)
+         .ToListAsync();
+            return View(role);
+          
         }
 
         // GET: Roles/Details/5
@@ -143,8 +148,7 @@ namespace AutoPartsHub.Controllers
             if (tblRoll != null)
             {
                 tblRoll.MDelete = true;
-                //tblRoll.UptadedAt = DateTime.Now;
-                //tblRoll.UpdatedBy = 1;
+
                 _context.Update(tblRoll);
             await _context.SaveChangesAsync();
             }

@@ -11,7 +11,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class BrandsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -27,7 +26,7 @@ namespace AutoPartsHub.Controllers
         public async Task<IActionResult> Index()
         {
             var brands = await _context.TblBrands
-           
+            .Where(b => b.MDelete != null && b.MDelete == false)
           .ToListAsync();
             return View(brands);
         }
@@ -149,7 +148,7 @@ namespace AutoPartsHub.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BrandId,BrandImageFile,BrandName,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
+        public async Task<IActionResult> Edit(int id, [Bind("BrandId,BrandName,BrandImageFile,BrandTitle,BrandShortName,BrandDescription,BrandImage,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblBrand tblBrand)
         {
             if (id != tblBrand.BrandId)
             {
@@ -196,7 +195,6 @@ namespace AutoPartsHub.Controllers
                         string imageURL = UploadedFolder + Image;
                         tblBrand.BrandImage = imageURL;
                     }
-
                     _context.Update(tblBrand);
                     await _context.SaveChangesAsync();
                 }

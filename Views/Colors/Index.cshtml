@@ -1,108 +1,61 @@
 ﻿@model IEnumerable<AutoPartsHub.Models.TblColor>
 
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
 
-@* INDEX TABLE DESIGN *@
+
 
 <div class="row">
     <div class="col-12">
 
         <div class="card">
-            <div class="card-header bg-theme">
-                <h4 class="card-title text-white"> Manage Colors</h4>
+            <div class="card-header bg-theme ">
+                <h4 class="card-title text-white">Color</h4>
                 <button type="button" class="btn bg-white" id="CreateColor">
 
-                    <a asp-action="Create" class="text-theme" style="color:#fff" id="CreateRoll">Create New</a>
+                    <a asp-action="Create" class="text-theme" style="color:lemonchiffon" id="CreateColor">Create New</a>
                 </button>
 
             </div>
 
             <div class="card-body">
-                <div class="table-responsive">
                     <table class="table table-responsive-md">
-
-
                         <thead>
-                            <tr>
-                             
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ColorName)
-                                </th>
-                             
-                              
-                                <th>
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                              
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ColorName)
-                                    </td>
-                                
-                                 
-                                      <td style="display: flex;margin-inline-start:0px !important">
- 
-                                        <a asp-action="Edit" class="btn btn-square btn-primary m-2" asp-route-id="@item.ColorId"><i class="fa fa-edit "></i></a>
-                                     <form asp-action="Delete" method="post" class="deleteForm">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ColorName)
+            </th>
+        
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColorName)
+            </td>
+           
+            <td style="display: flex;margin-left: -30 !important">
+                <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.ColorId"><i class="fa fa-edit "></i></a>
+
+                                        <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ColorId" asp-for="@item.ColorId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
                                         </form>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+                </div>
+            </div>
+            </div>
+            </div>
+            </div>
 
-                    @* Create Modal *@
-@* 
-                    <div class="modal fade bd-example-modal-lg" id="ColorCreate" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="CreateModalHeader"> </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                                    </button>
-                                </div>
-                                <div class="modal-body" id="createUserPreview">
-                                    @await Html.PartialAsync("/Views/Colors/_Create.cshtml", new TblColor())
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    @section Scripts {
-                        <script type="text/javascript">
-
-
-                            $("#CreateColor").click(function () {
-                                $("#ColorCreate").modal("show")
-
-                            });
-
-
-
-
-                        </script>
-                    }
- *@

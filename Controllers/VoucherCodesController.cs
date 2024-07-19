@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class VoucherCodesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,7 +21,8 @@ namespace AutoPartsHub.Controllers
         // GET: VoucherCodes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblVoucherCodes.ToListAsync());
+            var VoucherCodes = await _context.TblVoucherCodes.Where(x => x.Mdelete == false || x.Mdelete== null).ToListAsync();
+            return View(VoucherCodes);
         }
 
         // GET: VoucherCodes/Details/5
@@ -142,10 +142,11 @@ namespace AutoPartsHub.Controllers
             var tblVoucherCode = await _context.TblVoucherCodes.FindAsync(id);
             if (tblVoucherCode != null)
             {
-                _context.TblVoucherCodes.Remove(tblVoucherCode);
+                tblVoucherCode.Mdelete=true;
+                _context.TblVoucherCodes.Update(tblVoucherCode);
+            await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

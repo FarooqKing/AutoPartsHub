@@ -22,5 +22,6 @@ public partial class TblItemCategory
     public bool MDelete { get; set; }
 
     public virtual TblCategory Category { get; set; } = null!;
-    public virtual TblItem?  Item { get; set; } 
+
+    public virtual TblItem Item { get; set; } = null!;
 }

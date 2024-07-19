@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class TagsController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -21,8 +20,10 @@ namespace AutoPartsHub.Controllers
 
         // GET: Tags
         public async Task<IActionResult> Index()
+
         {
-            return View(await _context.TblTags.Where(x=>x.MDelete==false|| x.MDelete==null).ToListAsync());
+            var brnds = await _context.TblTags.Where(x => x.MDelete == false || x.MDelete == null).ToListAsync();
+            return View(brnds);
         }
 
         // GET: Tags/Details/5
@@ -142,6 +143,7 @@ namespace AutoPartsHub.Controllers
             var tblTag = await _context.TblTags.FindAsync(id);
             if (tblTag != null)
             {
+
                 tblTag.MDelete = true;
                 _context.TblTags.Update(tblTag);
             await _context.SaveChangesAsync();

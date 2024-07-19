@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoPartsHub.Models;
@@ -70,7 +69,7 @@ public partial class AutoPartsHubContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=UMAR-PC;Database=AutoPartsHub;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=UMAR-PC; DataBase=AutoPartsHub; Trusted_Connection=True; TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -197,6 +196,11 @@ public partial class AutoPartsHubContext : DbContext
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tbl_ItemCategory_tbl_Category");
+
+            entity.HasOne(d => d.Item).WithMany(p => p.TblItemCategories)
+                .HasForeignKey(d => d.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tbl_ItemCategory_tbl_Items");
         });
 
         modelBuilder.Entity<TblItemColor>(entity =>
@@ -531,5 +535,9 @@ public partial class AutoPartsHubContext : DbContext
         OnModelCreatingPartial(modelBuilder);
     }
 
+    public async Task<List<TblItem>> GetAllItemsAsync()
+    {
+        return await TblItems.FromSqlRaw("EXEC sp_GetAllItems").ToListAsync();
+    }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

@@ -26,13 +26,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PolicyAmount)
+                                    Policy Amount
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsLifeTime)
+                                    IsLife Time
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PolicyStatsDate)
+                                    Policy Stats Date
             </th>
             <th>
                 Actions
@@ -54,10 +54,13 @@
             <td style="display:flex;margin-inline:0px !important ">
                 <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.ShipingId"><i class="fa fa-edit"></i></a> 
                 
-<form asp-action="Delete" method="post" class="deleteForm">
-                                            <input type="hidden" name="id" value="@item.ShipingId" asp-for="@item.ShipingId" />
-                                            <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form>            </td>
+                                            <form asp-action="Delete" class="deleteForm">
+                                    <input type="hidden" name="id" value="@item.ShipingId" asp-for="@item.ShipingId" />
+                                    <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
+                                    </form>
+
+
+                                    </td>
         </tr>
 }
     </tbody>

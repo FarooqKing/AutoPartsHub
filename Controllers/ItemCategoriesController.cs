@@ -9,7 +9,6 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
-    //[CustomAuthentication]
     public class ItemCategoriesController : Controller
     {
         private readonly AutoPartsHubContext _context;
@@ -22,8 +21,8 @@ namespace AutoPartsHub.Controllers
         // GET: ItemCategories
         public async Task<IActionResult> Index()
         {
-            var AutoPartsHubContext = _context.TblItemCategories.Include(t => t.Category);
-            return View(await AutoPartsHubContext.ToListAsync());
+            var autoPartsHubContext = _context.TblItemCategories.Include(t => t.Category).Include(t=>t.Item);
+            return View(await autoPartsHubContext.ToListAsync());
         }
 
         // GET: ItemCategories/Details/5
@@ -36,6 +35,7 @@ namespace AutoPartsHub.Controllers
 
             var tblItemCategory = await _context.TblItemCategories
                 .Include(t => t.Category)
+                .Include(t => t.Item)
                 .FirstOrDefaultAsync(m => m.ItemCategoryId == id);
             if (tblItemCategory == null)
             {
@@ -50,7 +50,6 @@ namespace AutoPartsHub.Controllers
         {
             ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName");
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
-
             return View();
         }
 
@@ -69,7 +68,6 @@ namespace AutoPartsHub.Controllers
             }
             ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName", tblItemCategory.CategoryId);
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemCategory.ItemId);
-
             return View(tblItemCategory);
         }
 
@@ -126,6 +124,7 @@ namespace AutoPartsHub.Controllers
             }
             ViewData["CategoryId"] = new SelectList(_context.TblCategories, "CategoryId", "CategoryName", tblItemCategory.CategoryId);
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblItemCategory.ItemId);
+
             return View(tblItemCategory);
         }
 
@@ -138,7 +137,7 @@ namespace AutoPartsHub.Controllers
             }
 
             var tblItemCategory = await _context.TblItemCategories
-                .Include(t => t.Category)
+                .Include(t => t.Category).Include(t => t.Item)
                 .FirstOrDefaultAsync(m => m.ItemCategoryId == id);
             if (tblItemCategory == null)
             {
@@ -156,7 +155,7 @@ namespace AutoPartsHub.Controllers
             var tblItemCategory = await _context.TblItemCategories.FindAsync(id);
             if (tblItemCategory != null)
             {
-                tblItemCategory.MDelete = true;
+                tblItemCategory.MDelete=true;
                 _context.TblItemCategories.Update(tblItemCategory);
             await _context.SaveChangesAsync();
             }

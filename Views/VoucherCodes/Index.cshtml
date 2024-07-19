@@ -28,22 +28,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.VoucherText)
+                                    Voucher Text
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VoucherDiscount)
+                                    Voucher Discount
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ispercentage)
+                                    Is percentage
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsUsed)
+                                    Is Used
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsExpired)
+                                    Is Expired
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VoucherExpireDate)
+                                    Voucher Expire Date
             </th>
             <th>
                 Actions
@@ -74,10 +74,13 @@
             <td style="display:flex;margin-inline:0px !important">
                 <a asp-action="Edit"  class="btn btn-sm m-2 btn-primary" asp-route-id="@item.VoucherId"><i class="fa fa-edit"></i></a> 
                 
-<form asp-action="Delete" method="post" class="deleteForm">
-                                            <input type="hidden" name="id" value="@item.VoucherId" asp-for="@item.VoucherId" />
-                                            <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form>          </td>
+                                            <form asp-action="Delete" class="deleteForm">
+                                    <input type="hidden" name="id" value="@item.VoucherId" asp-for="@item.VoucherId" />
+                                    <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
+                                    </form>
+
+
+                                    </td>
         </tr>
 }
     </tbody>

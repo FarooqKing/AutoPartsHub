@@ -38,7 +38,7 @@ namespace AutoPartsHub.Models
             foreach (EntityEntry<ISoftDeleteTable> softDeletable in entries)
             {
                 softDeletable.State = EntityState.Modified;
-                softDeletable.Entity.mDelete = true;
+                softDeletable.Entity.MDelete = true;
                 softDeletable.Entity.UpdatedAt = DateTime.Now;
                 softDeletable.Entity.UpdatedBy = userId;
             }

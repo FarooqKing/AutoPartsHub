@@ -32,11 +32,11 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ItemId)
+                                    Item
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                                    Category
             </th>
             <th>
                 Actions
@@ -51,15 +51,16 @@
             </td>
          
             <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                                        @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>
             <td style="display:flex;margin-inline-start: 0px !important">
-                <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ItemCategoryId"><i class="fa fa-edit"></i></a> 
-                
-           <form asp-action="Delete" method="post" class="deleteForm">
+                <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="item.ItemCategoryId"><i class="fa fa-edit"></i></a>
+
+                                        <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ItemCategoryId" asp-for="@item.ItemCategoryId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form> </td>
+                                        </form>
+            </td>
         </tr>
 }
     </tbody>

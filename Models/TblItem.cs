@@ -25,7 +25,6 @@ public partial class TblItem
     public string? DefaultImageUrl { get; set; }
     [NotMapped]
     public IFormFile? DefaultImageFile { get; set; }
-
     public string? ShortDescription { get; set; }
 
     public string? LongDescription { get; set; }
@@ -41,6 +40,8 @@ public partial class TblItem
     public bool MDelete { get; set; }
 
     public virtual TblBrand? Brand { get; set; }
+
+    public virtual ICollection<TblItemCategory> TblItemCategories { get; set; } = new List<TblItemCategory>();
 
     public virtual ICollection<TblItemColor> TblItemColors { get; set; } = new List<TblItemColor>();
 

@@ -32,18 +32,12 @@
             <div class="form-group row">
             <div class="col-md-6">
                                 <label asp-for="TagId" class="control-label">Tag Id</label>
-                <select asp-for="TagId" class="form-control" asp-items="ViewBag.TagId">
-                                    <option>----- Select Tag -----</option>
-
-                </select>
+                <select asp-for="TagId" class="form-control" asp-items="ViewBag.TagId"></select>
                 <span asp-validation-for="TagId" class="text-danger"></span>
             </div>
             <div class="col-md-6">
                                 <label asp-for="ItemId" class="control-label">Item Id</label>
-                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId">
-                                    <option>----- Select Item -----</option>
-
-                </select>
+                <select asp-for="ItemId" class="form-control" asp-items="ViewBag.ItemId"></select>
                 <span asp-validation-for="ItemId" class="text-danger"></span>
             </div>
 

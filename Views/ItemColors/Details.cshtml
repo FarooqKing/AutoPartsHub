@@ -1,10 +1,17 @@
 ﻿@model AutoPartsHub.Models.TblItemColor
 
 @{
-    ViewData["Title"] = "Details";
+    Layout = null;
 }
 
-<h1>Details</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
 
 <div>
     <h4>TblItemColor</h4>
@@ -19,8 +26,20 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IsDefault)
         </dt>
-        <dd class = "col-sm-10">
+      @*   <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.IsDefault)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ItemColor)
+        </dt> *@
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ColorId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MDelete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MDelete)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
@@ -41,32 +60,28 @@
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Updatedby)
+                @Html.DisplayNameFor(model => model.Updatedby)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Updatedby)
+                @Html.DisplayFor(model => model.Updatedby)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MDelete)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MDelete)
-        </dd>
-        <dt class = "col-sm-2">
+       @*  <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Color)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Color.ColorId)
-        </dd>
+        </dd> *@
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Item)
+            @* @Html.DisplayNameFor(model => model.Item) *@
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Item.ItemId)
+            @* @Html.DisplayFor(model => model.Item.ItemId) *@
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ItemColorId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.ColorId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+</body>
+</html>

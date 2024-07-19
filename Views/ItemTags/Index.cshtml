@@ -11,7 +11,7 @@
 
         <div class="card">
             <div class="card-header bg-theme">
-                <h4 class="card-title text-white">ItemTags</h4>
+                <h4 class="card-title text-white">Item Size</h4>
                 <button type="button" class="btn bg-white" id="CreateUser">
 
                     <a asp-action="Create" class="text-theme" style="color:#fff">Create New</a>
@@ -19,20 +19,21 @@
 
             </div>
 
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-responsive-md">
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Item)
+                                    Item
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Tag)
+                                    Tag
                                 </th>
-                                <th>
-                                    Actions
-                                </th>
+                          
+                            
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,21 +46,26 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Tag.TagName)
                                     </td>
-                                    <td style="display:flex;margin-inline:0px !important">
-                                        <a asp-action="Edit" class="btn btn-square btn-primary" asp-route-id="@item.ItemTagId"><i class="fa fa-edit"></i></a> 
-                                        
-                                    <form asp-action="Delete" method="post" class="deleteForm">
+                                   
+                                  
+                                
+                                  
+                                    <td style="display: flex;margin-left: -30 !important">
+                                        <a asp-action="Edit" class="btn btn-sm m-2 btn-primary" asp-route-id="@item.ItemTagId"><i class="fa fa-edit"></i></a>
+
+                                        <form asp-action="Delete" method="post" class="deleteForm">
                                             <input type="hidden" name="id" value="@item.ItemTagId" asp-for="@item.ItemTagId" />
                                             <button type="submit" class="btn btn-danger btn-sm m-2"><i class="fa fa-trash"></i></button>
-                                        </form> </td>
+                                        </form>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
         </div>
     </div>
+</div>
 
 
