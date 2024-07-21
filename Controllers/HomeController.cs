@@ -96,7 +96,18 @@ namespace AutoPartsHub.Controllers
             }
 
         }
+        [Route("itemDetail")]
+        public async Task<IActionResult> ItemDetail(int id)
+        {
+            var item = await _context.TblItems.Include(t => t.TblItemImages)
+                                              .FirstOrDefaultAsync(x => x.ItemId == id);
+            if (item == null)
+            {
+                return NotFound();
+            }
 
+            return View(item);
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
