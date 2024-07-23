@@ -39,7 +39,7 @@
     <!--== Helper Min CSS ==-->
     <link href="/assets/css/helper.min.css" rel="stylesheet" />
     <!-- endbuild -->
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
    
     @RenderSection("Styles", required: false)
 </head>
@@ -64,13 +64,13 @@
                             <li><a href="/AdminDashboard/index">Admin</a></li>
                             <li><a href="/">Home</a></li>
               
-                            <li><a href="About">About</a></li>
-                            <li><a href="shop">Shop</a></li>
-                            <li><a href="blog">Blogs</a></li>
+                            <li><a asp-controller="Home" asp-action="About">About</a></li>
+                            <li><a asp-controller="Home" asp-action="Shop">Shop</a></li>
+                            <li><a asp-controller="Home" asp-action="Blog">Blogs</a></li>
                           
                             
                             <li><a href="gallery">Gallery</a></li>
-                            <li><a href="pages">Pages</a></li>
+                            <li><a asp-controller="Home" asp-action="Pages">Pages</a></li>
                             
                             <li><a asp-controller="Home" asp-action="ContactUS">Contact US</a></li>
                         </ul>
@@ -85,7 +85,7 @@
                         </ul>
 
                         <div class="mini-cart-wrap">
-                            <a href="pages" class="btn-mini-cart">
+                            <a asp-controller="Home" asp-action="Pages" class="btn-mini-cart">
                                 <i class="ion-bag"></i>
                                 <span class="cart-total">3</span>
                             </a>

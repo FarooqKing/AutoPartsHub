@@ -29,11 +29,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ItemId" />
             <div class="form-group row">
-                <div class="col-md-6">
-                                <label asp-for="ItemSlugs" class="control-label">Item Slugs</label>
-                    <input asp-for="ItemSlugs" class="form-control" />
-                    <span asp-validation-for="ItemSlugs" class="text-danger"></span>
-                </div>
+                            <div class="col-md-6 mt-4">
+                                <label class="control-label">Images</label>
+                                <input name="ImageFiles" type="file" class="form-control" multiple />
+                                <span class="text-danger"></span>
+                            </div>
+              
                 <div class="col-md-6">
                                 <label asp-for="ItemName" class="control-label">Item Name</label>
                     <input asp-for="ItemName" class="form-control" />
@@ -50,7 +51,7 @@
                     <span asp-validation-for="Discount" class="text-danger"></span>
                 </div>
                             <div class="col-md-6 mt-4 form-check form-switch d-flex flex-column">
-                                <label asp-for="IsFeature" class="control-label">Is Default</label>
+                                <label asp-for="IsFeature" class="control-label">Is Feature</label>
                                 <input asp-for="IsFeature" type="checkbox" role="switch" class="form-check-input" style="margin-left=1rem" />
                                 <span asp-validation-for="IsFeature" class="text-danger"></span>
                             </div>
@@ -64,11 +65,7 @@
                     <input asp-for="Sku" class="form-control" />
                     <span asp-validation-for="Sku" class="text-danger"></span>
                 </div>
-                <div class="col-md-6 mt-4">
-                                <label asp-for="DefaultImageFile" class="control-label">Default Image Url</label>
-                                <input asp-for="DefaultImageFile" class="form-control" />
-                                <span asp-validation-for="DefaultImageFile" class="text-danger"></span>
-                </div>
+               
                 <div class="col-md-6mt-4">
                                 <label asp-for="ShortDescription" class="control-label">Short Description</label>
                     <input asp-for="ShortDescription" class="form-control" />

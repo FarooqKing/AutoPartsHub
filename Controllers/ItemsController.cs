@@ -172,23 +172,6 @@ namespace AutoPartsHub.Controllers
         }
 
 
-        // GET: Items/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _context.TblItems.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            ViewData["BrandId"] = new SelectList(_context.TblBrands, "BrandId", "BrandName", item.BrandId);
-            return View(item);
-        }
-
 
 
         // GET: Items/Edit/5
@@ -207,11 +190,119 @@ namespace AutoPartsHub.Controllers
             return View(item);
         }
 
+        //// GET: Items/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var item = await _context.TblItems.FindAsync(id);
+        //    if (item == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["BrandId"] = new SelectList(_context.TblBrands, "BrandId", "BrandName", item.BrandId);
+        //    return View(item);
+        //}
+
+
+        //// POST: Items/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ItemId,DefaultImageFile,ItemSlugs,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem , IFormFileCollection ImageFiles)
+        //{
+        //    if (id != tblItem.ItemId)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+
+        //                tblItem.ItemSlugs = $"{tblItem.ItemName.Replace(" ", "_")}_{Guid.NewGuid()}";
+
+        //                _context.Add(tblItem);
+        //                await _context.SaveChangesAsync();
+        //                int itemId = tblItem.ItemId;
+        //                var count = 0;
+        //                foreach (var file in ImageFiles)
+        //                {
+        //                    var newItemImage = new TblItemImage
+        //                    {
+        //                        ItemImageName = file.FileName,
+        //                        ItemId = itemId,
+        //                        CreatedAt = DateTime.Now,
+        //                        CreatedBy = 1,
+        //                        MDelete = false
+        //                    };
+
+        //                    if (count == 0)
+        //                    {
+        //                        newItemImage.IsDefault = true;
+        //                    }
+        //                    else
+        //                    {
+        //                        newItemImage.IsDefault = false;
+        //                    }
+
+        //                    var imagesType = UploadImage(file, newItemImage.ItemId);
+        //                    newItemImage.BanerImage = imagesType.Slider;
+        //                    newItemImage.ThumbnailImage = imagesType.Thumbnail;
+        //                    newItemImage.NormalImage = imagesType.Default;
+
+        //                    _context.Add(newItemImage);
+        //                    await _context.SaveChangesAsync();
+        //                    count++;
+        //                }
+
+        //                return RedirectToAction(nameof(Index));
+
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TblItemExists(tblItem.ItemId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+
+        //    }
+        //    ViewData["BrandId"] = new SelectList(_context.TblBrands, "BrandId", "BrandName", tblItem.BrandId);
+        //    return View(tblItem);
+        //}
+
+
+
+        // GET: Items/Edit/5
+        [HttpGet("Items/Edit/{id:int}")]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _context.TblItems.FindAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            ViewData["BrandId"] = new SelectList(_context.TblBrands, "BrandId", "BrandName", item.BrandId);
+            return View(item);
+        }
 
         // POST: Items/Edit/5
-        [HttpPost]
+        [HttpPost("Items/Edit/{id:int}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,DefaultImageFile,ItemSlugs,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemId,DefaultImageFile,ItemSlugs,ItemName,ItemPrice,Discount,IsFeature,BrandId,Sku,DefaultImageUrl,ShortDescription,LongDescription,CreatedAt,CreatedBy,UpdatedAt,UpdatedBy,MDelete")] TblItem tblItem, IFormFileCollection ImageFiles)
         {
             if (id != tblItem.ItemId)
             {
@@ -222,10 +313,72 @@ namespace AutoPartsHub.Controllers
             {
                 try
                 {
-                    //  tblItem.DefaultImageUrl = await SaveImage(tblItem.DefaultImageFile);
-             
+                    tblItem.ItemSlugs = $"{tblItem.ItemName.Replace(" ", "_")}_{Guid.NewGuid()}";
                     _context.Update(tblItem);
                     await _context.SaveChangesAsync();
+
+                    // Retrieve existing images
+                    var existingImages = _context.TblItemImages.Where(i => i.ItemId == id).ToList();
+
+                    // Delete existing images from the database and file system
+                    foreach (var existingImage in existingImages)
+                    {
+                        _context.TblItemImages.Remove(existingImage);
+
+                        var wwwRootPath = _hostingEnvironment.WebRootPath;
+                        var imagePaths = new[]
+                        {
+                    Path.Combine(wwwRootPath, existingImage.BanerImage),
+                    Path.Combine(wwwRootPath, existingImage.ThumbnailImage),
+                    Path.Combine(wwwRootPath, existingImage.NormalImage)
+                };
+
+                        foreach (var path in imagePaths)
+                        {
+                            if (System.IO.File.Exists(path))
+                            {
+                                System.IO.File.Delete(path);
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    // Add new images
+                    int itemId = tblItem.ItemId;
+                    var count = 0;
+
+                    foreach (var file in ImageFiles)
+                    {
+                        var newItemImage = new TblItemImage
+                        {
+                            ItemImageName = file.FileName,
+                            ItemId = itemId,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = 1,
+                            MDelete = false
+                        };
+
+                        if (count == 0)
+                        {
+                            newItemImage.IsDefault = true;
+                        }
+                        else
+                        {
+                            newItemImage.IsDefault = false;
+                        }
+
+                        var imagesType = UploadImage(file, newItemImage.ItemId);
+                        newItemImage.BanerImage = imagesType.Slider;
+                        newItemImage.ThumbnailImage = imagesType.Thumbnail;
+                        newItemImage.NormalImage = imagesType.Default;
+
+                        _context.Add(newItemImage);
+                        await _context.SaveChangesAsync();
+                        count++;
+                    }
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -238,12 +391,10 @@ namespace AutoPartsHub.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["BrandId"] = new SelectList(_context.TblBrands, "BrandId", "BrandName", tblItem.BrandId);
             return View(tblItem);
         }
-
         // GET: Items/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
