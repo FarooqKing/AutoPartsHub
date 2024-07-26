@@ -184,9 +184,9 @@
                         </div>
                         <!-- Product Actions -->
                         <div class="product-item__action">
-                        <button class="btn-add-to-cart"><i class="ion-bag"></i></button>
-                        <button class="btn-add-to-cart"><i class="ion-ios-loop-strong"></i></button>
-                        <button class="btn-add-to-cart"><i class="ion-ios-heart-outline"></i></button>
+                                            <button class="btn-add-to-cart addToCart" data-item-id=" @item.ItemId"><i class="ion-bag"></i></button>
+                                            <button class="btn-add-to-cart "><i class="ion-ios-loop-strong"></i></button>
+                                            <button class="btn-add-to-cart addToWishList" data-item-id=" @item.ItemId"><i class="ion-ios-heart-outline"></i></button>
                         <button class="btn-add-to-cart"><i class="ion-eye"></i></button>
                         </div>
                         <!-- Product Description -->
@@ -232,3 +232,57 @@
     </div>
 </div>
 <!--== End Page Content Wrapper ==-->
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+          
+          
+            $('.addToCart').on('click', function (e) {
+                e.preventDefault();
+                var itemId = $(this).data('item-id'); // Get the item ID from the model
+                var quantity = $('#quantity').val(); // Get the quantity from the input
+                $.ajax({
+                    type: 'POST',
+                    url: '/addToCart',
+                    data: { itemId: itemId, quantity: quantity },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            LoadCartData();// Show success message
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error occurred while adding item to cart');
+                    }
+                });
+            });
+
+            $('.addToWishList').on('click', function (e) {
+                e.preventDefault();
+                var itemId = $(this).data('item-id'); // Get the item ID from the model
+                var quantity = $('#quantity').val(); // Get the quantity from the input
+                $.ajax({
+                    type: 'POST',
+                    url: "/addToWishList",
+                    data: { itemId: itemId, quantity: quantity },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                         
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error occurred while adding item to cart');
+                    }
+                });
+            });
+        
+        });
+
+    </script>
+}

@@ -1,9 +1,13 @@
+using _Helper;
 using AutoPartsHub.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AutoPartsHub.Controllers
 {
@@ -64,9 +68,88 @@ namespace AutoPartsHub.Controllers
 
 
         //[Route("Pages")]
-        public async Task<IActionResult> Pages()
+        public async Task<IActionResult> Cart()
+        {
+
+           
+            List<TblItem> tblItems=new List<TblItem>();
+
+            if (!string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
+            {
+                var data = HttpContext.Request.Cookies["AutoHubCart"];
+                var DecriptData = Protection.Decrypt(data);
+
+                ListCartModel listCartModel = JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+
+                if (listCartModel != null && listCartModel.Carts.Count > 0)
+                {
+                    List<int> ProductIds=listCartModel.Carts.Select(x=>x.ProductId).ToList();   
+
+                    tblItems = (await _context.TblItems
+                                      .Where(x => x.MDelete == false || x.MDelete == null)
+                                      .Where(x => ProductIds.Contains(x.ItemId))
+                                      .Include(t => t.Brand).Include(t => t.TblItemImages)
+                                      .ToListAsync());
+
+                    foreach (var item in tblItems)
+                    {
+                        var cartItem = listCartModel.Carts.FirstOrDefault(c => c.ProductId == item.ItemId);
+                        if (cartItem != null)
+                        {
+                            item.Quantity = cartItem.Quantity;
+                        }
+                    }
+
+
+                }
+                else
+                {
+
+                }
+            }
+           
+            
+
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+
+            return View(tblItems);
+        }
+
+        [Route("GetCartCount")]
+
+        public async Task<IActionResult> GetCartCount()
+        {
+            try
+            {
+               
+                int itemCount = 0;
+                if (!string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
+                {
+                    var data = HttpContext.Request.Cookies["AutoHubCart"];
+                    var DecriptData = Protection.Decrypt(data);
+
+                    ListCartModel listCartModel = JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+
+                    itemCount = listCartModel.Carts.Count();
+                }
+
+
+                return Json(new { success = true, message = itemCount });
+
+              
+            }
+            catch (Exception exp)
+            {
+                return Json(new {success = false,message=exp.Message});
+            }
+           
+            
+        }
+
+        public async Task<IActionResult> ConfirmOrder()
         {
             var orderDetails = await _context.TblOrderDetails
+                                           
                                              .Include(od => od.Item)
                                              .ThenInclude(item => item.TblItemImages)
                                              .ToListAsync();
@@ -117,73 +200,282 @@ namespace AutoPartsHub.Controllers
 
             return View(item);
         }
-        [Route("addToCart")]
-        [HttpPost]
-        public async Task<IActionResult> AddToCart(int itemId, int quantity )
+
+        // GET: Checkout
+        [HttpGet]
+        public IActionResult Checkout(int itemId, decimal totalAmount)
         {
-            // Retrieve the item from the database
-            var item = await _context.TblItems.Include(t => t.TblItemImages)
-                                              .FirstOrDefaultAsync(x => x.ItemId == itemId);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
-            
-            // Add the item to the order details (cart)
-            var orderDetail = new TblOrderDetail
-            {
-
-                ItemId = itemId,
-                ItemQuantity = quantity,
-                TotelAmount = item.ItemPrice * quantity
-            };
-
-            _context.TblOrderDetails.Add(orderDetail);
-            await _context.SaveChangesAsync();
-
-            return Json(new { success = true, message = "Item added to cart successfully" });
+          
+            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+            ViewData["UserId"] = new SelectList(_context.TblUsers, "UserId", "UserName");
+            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
+            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
+            ViewData["ProvinceId"] = new SelectList(_context.TblProvinces, "ProvinceId", "ProvinceName");
+            ViewData["StatusId"] = new SelectList(_context.TblStatuses, "StatusId", "StatusName");
+            return View();
         }
 
-
-
-
-
-
-
-
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout([Bind("OrderId,Email,PhoneNo,CountryId,ProvinceId,CityId,PostelCode ,CityName,CountryName,ProvinceName,DeliveryAddress,GrandTotal ")] TblOrdersMain tblOrdersMain)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (ModelState.IsValid)
+                {
+                    _context.Add(tblOrdersMain);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Success");
+                }
 
-            var item = await _context.TblOrderDetails
-                                     .Include(t => t.Item)
-                                     .FirstOrDefaultAsync(m => m.OrderDetailId== id);
-            if (item == null)
+                ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblOrdersMain.ItemId);
+                ViewData["UserId"] = new SelectList(_context.TblUsers, "UserId", "UserName", tblOrdersMain.UserId);
+                ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName", tblOrdersMain.CityId);
+                ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName", tblOrdersMain.CountryId);
+                ViewData["ProvinceId"] = new SelectList(_context.TblProvinces, "ProvinceId", "ProvinceName", tblOrdersMain.ProvinceId);
+                ViewData["StatusId"] = new SelectList(_context.TblStatuses, "StatusId", "StatusName", tblOrdersMain.StatusId);
+                return View(tblOrdersMain);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                ViewBag.Message = ex.Message;
+                return View(tblOrdersMain);
             }
-
+        }
+        [Route("wishList")]
+        [HttpGet]
+        public async Task<IActionResult> WishList()
+        {
+            var item = await _context.TblItems.Include(x=>x.TblItemImages).ToListAsync();
             return View(item);
         }
+        [Route("/addToWishList")]
+        [HttpPost]
+        public IActionResult WishList(int itemId, int quantity)
+        {
 
+            try
+            {
+                CookieOptions cookieOptions = new CookieOptions();
+                cookieOptions.Secure = true;
+                cookieOptions.HttpOnly = true;
+                cookieOptions.Expires = DateTime.Now.AddDays(30);
+                cookieOptions.IsEssential = true;
+
+                if (string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubWishList"]))
+                {
+                    CartModel cartModel = new CartModel()
+                    {
+                        ProductId = itemId,
+                        Quantity = quantity
+                    };
+
+                    ListCartModel listCartModel = new ListCartModel();
+                    listCartModel.Carts.Add(cartModel);
+
+                    string JsonData = JsonConvert.SerializeObject(listCartModel);
+
+                    var ProtectedData = Protection.Encrypt(JsonData);
+
+                    HttpContext.Response.Cookies.Append("AutoHubWishList", ProtectedData, cookieOptions);
+                }
+                else
+                {
+                    var data = HttpContext.Request.Cookies["AutoHubWishList"];
+
+                    var DecriptData = Protection.Decrypt(data);
+
+                    ListCartModel listCartModel = JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+
+                    if (listCartModel != null && listCartModel.Carts.Count > 0)
+                    {
+                        if (listCartModel.Carts.Any(x => x.ProductId == itemId))
+                        {
+                            return Json(new { success = false, message = "Item  Already in the Wish List" });
+
+                        }
+                        else
+                        {
+                            listCartModel.Carts.Add(new CartModel()
+                            {
+                                ProductId = itemId,
+                                Quantity = quantity
+                            });
+
+
+                            string JsonData = JsonConvert.SerializeObject(listCartModel);
+
+                            var ProtectedData = Protection.Encrypt(JsonData);
+
+                            HttpContext.Response.Cookies.Append("AutoHubWishList", ProtectedData, cookieOptions);
+
+                        }
+                    }
+                    else
+                    {
+                        CookieOptions cookieOptionsNew = new CookieOptions();
+                        cookieOptionsNew.Secure = true;
+                        cookieOptionsNew.HttpOnly = true;
+                        cookieOptionsNew.Expires = DateTime.Now.AddDays(-1);
+                        HttpContext.Response.Cookies.Append("AutoHubWishList", "", cookieOptionsNew);
+                        HttpContext.Response.Cookies.Delete("AutoHubWishList");
+                        throw new Exception("Some things went wrong");
+
+                    }
+
+                }
+
+                return Json(new { success = true, message = "Item added to WishList successfully" });
+            }
+            catch (Exception exp)
+            {
+
+                return Json(new { success = false, message = exp.Message });
+
+            }
+        }
+
+    
+        [Route("addToCart")]
+        [HttpPost]
+        public  IActionResult AddToCart(int itemId, int quantity)
+        {
+
+            try
+            {
+                CookieOptions cookieOptions= new CookieOptions();
+                cookieOptions.Secure = true;
+                cookieOptions.HttpOnly = true;
+                cookieOptions.Expires=DateTime.Now.AddDays(30);
+                cookieOptions.IsEssential = true;
+
+                if (string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
+                {
+                    CartModel cartModel = new CartModel()
+                    {
+                        ProductId = itemId,
+                        Quantity = quantity 
+                    };
+
+                    ListCartModel listCartModel = new ListCartModel();
+                    listCartModel.Carts.Add(cartModel);
+
+                     string JsonData=JsonConvert.SerializeObject(listCartModel);
+
+                    var ProtectedData=Protection.Encrypt(JsonData);
+
+                    HttpContext.Response.Cookies.Append("AutoHubCart", ProtectedData, cookieOptions);
+                }
+                else
+                {
+                    var data = HttpContext.Request.Cookies["AutoHubCart"];
+
+                    var DecriptData=Protection.Decrypt(data);
+
+                    ListCartModel listCartModel=JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+
+                    if (listCartModel != null && listCartModel.Carts.Count > 0)
+                    {
+                        if (listCartModel.Carts.Any(x => x.ProductId == itemId))
+                        {
+                            return Json(new { success = false, message = "Item  Already in the cart" });
+
+                        }
+                        else
+                        {
+                            listCartModel.Carts.Add(new CartModel() 
+                            {
+                                ProductId= itemId,
+                                Quantity = quantity
+                            });
+
+
+                            string JsonData = JsonConvert.SerializeObject(listCartModel);
+
+                            var ProtectedData = Protection.Encrypt(JsonData);
+
+                            HttpContext.Response.Cookies.Append("AutoHubCart", ProtectedData, cookieOptions);
+                        
+                         }
+                    }
+                    else
+                    {
+                        CookieOptions cookieOptionsNew = new CookieOptions();
+                        cookieOptionsNew.Secure = true;
+                        cookieOptionsNew.HttpOnly = true;
+                        cookieOptionsNew.Expires = DateTime.Now.AddDays(-1);
+                        HttpContext.Response.Cookies.Append("AutoHubCart", "", cookieOptionsNew);
+                        HttpContext.Response.Cookies.Delete("AutoHubCart");
+                        throw new Exception("Some things went wrong");
+
+                    }
+
+                }
+
+                return Json(new { success = true, message = "Item added to cart successfully" });
+            }
+            catch (Exception exp)
+            {
+
+                return Json(new { success = false, message = exp.Message });
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+      
         // POST: Items/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var item = await _context.TblOrderDetails.FindAsync(id);
-            if (item != null)
+            try
             {
-                item.MDelete = true;
-                _context.TblOrderDetails.Update(item);
-                await _context.SaveChangesAsync();
+                if (!string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
+                {
+                    var data = HttpContext.Request.Cookies["AutoHubCart"];
+                    var DecriptData = Protection.Decrypt(data);
+
+                    ListCartModel listCartModel = JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+
+                    var cartData = listCartModel.Carts.FirstOrDefault(x => x.ProductId == id);
+
+                    listCartModel.Carts.Remove(cartData);
+
+                    CookieOptions cookieOptions = new CookieOptions();
+                    cookieOptions.Secure = true;
+                    cookieOptions.HttpOnly = true;
+                    cookieOptions.Expires = DateTime.Now.AddDays(30);
+                    cookieOptions.IsEssential = true;
+
+
+                    string JsonData = JsonConvert.SerializeObject(listCartModel);
+
+                    var ProtectedData = Protection.Encrypt(JsonData);
+
+                    HttpContext.Response.Cookies.Append("AutoHubCart", ProtectedData, cookieOptions);
+
+
+                }
+
+                ViewBag.SuccessMsg = "Item Removed Successfully";
+
+                return RedirectToAction(nameof(Cart));
+            }
+            catch (Exception exp)
+            {
+                ViewBag.ErrorMsg=exp.Message;
+                return RedirectToAction(nameof(Cart));
             }
 
-            return RedirectToAction("Pages", "Home");
+
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()

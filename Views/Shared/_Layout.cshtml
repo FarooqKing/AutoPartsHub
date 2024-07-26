@@ -70,8 +70,16 @@
                           
                             
                             <li><a href="gallery">Gallery</a></li>
-                            <li><a asp-controller="Home" asp-action="Pages">Pages</a></li>
+                            <li class="has-submenu">
+                                <a href="#">Pages</a>
+                                <ul class="sub-menu">
+                                    <li><a asp-controller="Home" asp-action="Cart">Cart</a></li>
+                                    <li><a asp-controller="Home" asp-action="ConfirmOrder">Confirm Order</a></li>
+                                    <li><a asp-controller="Home" asp-action="Checkout">Checkout</a></li>
+                                    <li><a href="wishList">Wishlist</a></li>
                             
+                                </ul>
+                            </li>
                             <li><a asp-controller="Home" asp-action="ContactUS">Contact US</a></li>
                         </ul>
                     </div>
@@ -85,9 +93,9 @@
                         </ul>
 
                         <div class="mini-cart-wrap">
-                            <a asp-controller="Home" asp-action="Pages" class="btn-mini-cart">
+                            <a asp-controller="Home" asp-action="Cart" class="btn-mini-cart">
                                 <i class="ion-bag"></i>
-                                <span class="cart-total">3</span>
+                                <span class="cart-total" id="cartTotalId">0</span>
                             </a>
 
                             <div class="mini-cart-content">
@@ -303,6 +311,34 @@
     <script src="/assets/js/countdown.js"></script>
     <!--=== Active Js ===-->
     <script src="/assets/js/active.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            LoadCartData();
+        });
+
+        function LoadCartData(){
+
+            $.ajax({
+                type: 'GET',
+                url: '/GetCartCount',
+
+                success: function (response) {
+                    if (response.success) {
+
+                        $("#cartTotalId").html(response.message);
+                        // Show success message
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('Error occurred while adding item to cart');
+                }
+            });
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

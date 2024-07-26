@@ -1,6 +1,6 @@
-﻿@model IEnumerable<AutoPartsHub.Models.TblOrderDetail>
+﻿@model IEnumerable<AutoPartsHub.Models.TblItem>
 @{
-    ViewData["Title"] = "Pages";
+    ViewData["Title"] = "cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -29,6 +29,25 @@
 <div class="page-content-wrapper sp-y">
     <div class="cart-page-content-wrap">
         <div class="container container-wide">
+            
+            <div class="row m-3">
+                <div class="col-sm-12">
+                    @if (!string.IsNullOrEmpty(ViewBag.ErrorMsg))
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.ErrorMsg
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.SuccessMsg))
+                    {
+                        <div class="alert alert-success">
+                            @ViewBag.SuccessMsg
+                        </div>
+                    }
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-8">
                     <div class="shopping-cart-list-area">
@@ -50,26 +69,31 @@
                                                 <div class="cart-product-item d-flex align-items-center">
                                                     <div class="remove-icon">
                                                         <form asp-action="Delete" method="post" class="deleteForm">
-                                                            <input type="hidden" name="id" value="@item.OrderDetailId" asp-for="@item.OrderDetailId" />
+                                                            <input type="hidden" name="id" value="@item.ItemId" asp-for="@item.ItemId" />
                                                             <button type="submit" class="btn-sm"><i class="fa fa-trash"></i></button>
                                                         </form>
                                                     </div>
-                                                    <a href="single-product.html" class="product-thumb">
-                                                        <img src="@item.Item.TblItemImages.FirstOrDefault(img => img.IsDefault).NormalImage" alt="Product" />
+                                                    <a asp-asp-controller="Home" asp-action="ItemDetail" class="product-thumb">
+                                                        <img src="@item.TblItemImages.FirstOrDefault(img => img.IsDefault).NormalImage" alt="Product" />
                                                     </a>
-                                                    <a href="single-product.html" class="product-name">
-                                                        @item.Item.ItemName
+                                                    <a asp-asp-controller="Home" data-item-id="@item.ItemId" asp-action="ItemDetail" class="product-name">
+                                              
+                                                        @item.ItemName
                                                     </a>
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="price">$@item.Item.ItemPrice</span>
+                                                <span class="price">$@item.ItemPrice</span>
+                                            </td>
+                                            <td class="quantity">
+                                                <div class="pro-qty mr-3 mb-4 mb-sm-0">
+                                                    <label for="quantity" class="sr-only">Quantity</label>
+                                                    <input type="text" id="quantity" min="1" title="Quantity" value="1" />
+                                                </div>
+                                               
                                             </td>
                                             <td>
-                                                @item.ItemQuantity
-                                            </td>
-                                            <td>
-                                                <span class="price item-total">$@item.TotelAmount</span>
+                                                <span class="price item-total" data-total-amount="@item.">$@item.TotalPrice</span>
                                             </td>
                                         </tr>
                                     }
@@ -99,7 +123,7 @@
                             <table class="table table-borderless">
                                 <tr class="cart-sub-total">
                                     <th>Subtotal</th>
-                                    <td>$<span id="cart-subtotal">@Model.Sum(item => item.TotelAmount)</span></td>
+                                    <td><span id="cart-subtotal">@Model.Sum(item => item.TotalPrice)</span></td>
                                 </tr>
                                 <tr class="shipping">
                                     <th>Shipping</th>
@@ -107,19 +131,19 @@
                                         <ul class="shipping-method">
                                             <li>
                                                 <div class="form-check">
-                                                    <input type="radio" id="cod_shipping" name="shipping_method" class="form-check-input" value="cod" checked />
+                                                    <input type="radio" id="cod_shipping" name="shipping_method" class="form-check-input shipping-cost" value="cod" checked />
                                                     <label class="form-check-label" for="cod_shipping">Cash on Delivery</label>
                                                 </div>
                                             </li>
-                                          @*   <li>
-                                                <div class="form-check">
-                                                    <input type="radio" id="free_shipping" name="shipping_method" class="form-check-input" value="free" checked />
-                                                    <label class="form-check-label" for="free_shipping">Shipping Charges</label>
-                                                </div>
+                                            @*   <li>
+                                            <div class="form-check">
+                                            <input type="radio" id="free_shipping" name="shipping_method" class="form-check-input" value="free" checked />
+                                            <label class="form-check-label" for="free_shipping">Shipping Charges</label>
+                                            </div>
                                             </li> *@
                                             <li>
                                                 <div class="form-check">
-                                                    <input type="radio" id="flat_shipping" name="shipping_method" class="form-check-input" value="flat"  />
+                                                    <input type="radio" id="flat_shipping" name="shipping_method" class="form-check-input shipping-cost" value="flat" />
                                                     <label class="form-check-label" for="flat_shipping">Shipping : 100</label>
                                                 </div>
                                             </li>
@@ -128,12 +152,12 @@
                                 </tr>
                                 <tr class="order-total">
                                     <th>Total</th>
-                                    <td><b>$<span id="cart-total">@Model.Sum(item => item.TotelAmount)</span></b></td>
+                                    <td><b><span id="cart-total">@Model.Sum(item => item.TotalPrice)</span></b></td>
                                 </tr>
                             </table>
                         </div>
                         <div class="proceed-checkout-btn">
-                            <a href="checkout.html" class="btn btn-brand d-block">Proceed to Checkout</a>
+                            <button asp-controller="Home" asp-action="Checkout" class="btn btn-brand d-block">Proceed to Checkout</button>
                         </div>
                     </div>
                 </div>
@@ -145,15 +169,22 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('input[name="shipping_method"]').on('change', function () {
-                var shippingMethod = $(this).val();
-                var subtotal = parseFloat($('#cart-subtotal').text().replace('$', ''));
-                var shippingCost = shippingMethod === 'flat' ? 100 : 0; // Flat rate is 100 rupees
 
-                var total = subtotal + shippingCost;
-                $('#cart-total').text(total.toFixed(2));
+            $(document).ready(function () {
+                // Update total amount based on shipping method selection
+                $('input[name="shipping_method"]').on('change', function () {
+                    var shippingMethod = $(this).val();
+                    var subtotal = parseFloat($('#cart-subtotal').text().replace('$', '').trim());
+                    var shippingCost = shippingMethod === 'flat' ? 100 : 0; // Flat rate is 100 rupees
+
+                    var total = subtotal + shippingCost;
+                    $('#cart-total').text('' + total.toFixed(2));
+                });
+
+            
             });
-        });
+
+
+
     </script>
 }
