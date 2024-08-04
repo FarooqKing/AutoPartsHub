@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AutoPartsHub.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthorization]
+    [Authorize(Roles = "Admin")]
     public class VoucherCodesController : Controller
     {
         private readonly AutoPartsHubContext _context;

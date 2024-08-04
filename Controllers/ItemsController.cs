@@ -11,9 +11,13 @@ using Microsoft.EntityFrameworkCore;
 using AutoPartsHub.Models;
 using Microsoft.Extensions.Hosting;
 using AutoPartsHub._Helper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthorization]
+    [Authorize(Roles = "Admin")]
+
     public class ItemsController : Controller
     {
         private readonly AutoPartsHubContext _context;

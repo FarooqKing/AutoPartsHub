@@ -13,6 +13,8 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthorization]
+
     public class ItemImagesController : Controller
     {
         private readonly AutoPartsHubContext _context;

@@ -135,12 +135,7 @@
                                                     <label class="form-check-label" for="cod_shipping">Cash on Delivery</label>
                                                 </div>
                                             </li>
-                                            @*   <li>
-                                            <div class="form-check">
-                                            <input type="radio" id="free_shipping" name="shipping_method" class="form-check-input" value="free" checked />
-                                            <label class="form-check-label" for="free_shipping">Shipping Charges</label>
-                                            </div>
-                                            </li> *@
+                                          
                                             <li>
                                                 <div class="form-check">
                                                     <input type="radio" id="flat_shipping" name="shipping_method" class="form-check-input shipping-cost" value="flat" />
@@ -157,7 +152,7 @@
                             </table>
                         </div>
                         <div class="proceed-checkout-btn">
-                            <button asp-controller="Home" asp-action="Checkout" class="btn btn-brand d-block">Proceed to Checkout</button>
+                            <a asp-controller="Home" asp-action="Checkout"  class="btn btn-brand d-block">Proceed to Checkout</a>
                         </div>
                     </div>
                 </div>
@@ -183,6 +178,8 @@
 
             
             });
+      
+      
 
 
 

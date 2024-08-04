@@ -9,6 +9,8 @@ using AutoPartsHub.Models;
 
 namespace AutoPartsHub.Controllers
 {
+    [CustomAuthorization]
+
     public class ItemCategoriesController : Controller
     {
         private readonly AutoPartsHubContext _context;

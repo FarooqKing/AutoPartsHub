@@ -98,7 +98,7 @@
                                         </div>
 
                                         <div class="product-action">
-                                            <div class="action-top d-sm-flex">
+                                            <div class="action-top d-sm-flex justify-content-between w-75">
                                                 <div class="pro-qty mr-3 mb-4 mb-sm-0">
                                                     <label for="quantity" class="sr-only">Quantity</label>
                                                     <input type="text" id="quantity" title="Quantity" value="1" />
@@ -118,7 +118,7 @@
                                         </span>
 
                                             <span class="tagged_as">Tags:
-                                            <a href="#">Seller,</a>
+                                            <a href="#">@Model.TblItemTags.FirstOrDefault(x=>x.ItemId==Model.ItemId)</></a>
                                             <a href="#">Modern,</a>
                                             <a href="#">Parts</a>
                                         </span>

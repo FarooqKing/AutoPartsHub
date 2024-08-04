@@ -820,22 +820,8 @@ blockquote-title, .blockquote-title {
     margin-right: 15px;
   }
 }
-.site-action .login-reg-nav li:after {
-  content: "|";
-  position: absolute;
-  right: -20px;
-  top: 0;
-}
-@media only screen and (max-width: 767.98px) {
-  .site-action .login-reg-nav li:after {
-    right: -10px;
-  }
-}
-@media only screen and (min-width: 992px) and (max-width: 1199.98px) {
-  .site-action .login-reg-nav li:after {
-    right: -12px;
-  }
-}
+
+
 .site-action .login-reg-nav li:last-child:after {
   display: none;
 }

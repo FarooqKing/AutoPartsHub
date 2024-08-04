@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AutoPartsHub.Models;
 
@@ -7,7 +8,8 @@ public partial class TblOrdersMain
 {
     public int OrderId { get; set; }
 
-    public int ?UserId { get; set; }
+    public int? UserId { get; set; }
+
     public int? ItemId { get; set; }
 
     public decimal ?GrandTotal { get; set; }
@@ -18,7 +20,7 @@ public partial class TblOrdersMain
 
     public int? PaymentId { get; set; }
 
-    public string ?PaymentType { get; set; } = null!;
+    public string PaymentType { get; set; } = null!;
 
     public decimal ?ShippingAmount { get; set; }
 
@@ -57,7 +59,7 @@ public partial class TblOrdersMain
     public virtual TblCity? City { get; set; }
 
     public virtual TblCountry? Country { get; set; }
-    public virtual TblItem? Item { get; set; }
+    public virtual ICollection<TblItem> Item { get; set; } = new List<TblItem>();
 
     public virtual TblProvince? Province { get; set; }
 

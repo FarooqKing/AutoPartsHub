@@ -1,5 +1,8 @@
 using _Helper;
 using AutoPartsHub.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,37 +10,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using AutoPartsHub._Helper;
 
 namespace AutoPartsHub.Controllers
 {
-	public class HomeController : Controller
-	{
-		private readonly ILogger<HomeController> _logger;
+    //[CustomAuthorization]
+    public class HomeController : Controller
+    {
+        private readonly ILogger<HomeController> _logger;
         private readonly AutoPartsHubContext _context;
-		public HomeController(ILogger<HomeController> logger , AutoPartsHubContext context)
-		{
-			_logger = logger;
+        private readonly IMailService _mailService;
+        public HomeController(ILogger<HomeController> logger, IMailService mailService, AutoPartsHubContext context)
+        {
+            _logger = logger;
             _context = context;
-		}
+            _mailService = mailService;
+        }
 
-	
+
+
         public async Task<IActionResult> Index()
         {
-            var items = await _context.TblItems.Include(x=>x.TblItemImages).ToListAsync();
+            var items = await _context.TblItems.Include(x => x.TblItemImages).ToListAsync();
             return View(items);
         }
         [Route("privacy")]
         public IActionResult Privacy()
-		{
-			return View();
-		}
+        {
+            return View();
+        }
 
-		[Route("about")]
-		public IActionResult About()
-		{
-			return View();
-		}
+        [Route("about")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
         [Route("shop")]
         public async Task<IActionResult> Shop()
         {
@@ -45,13 +55,7 @@ namespace AutoPartsHub.Controllers
             return View(items);
         }
 
-        //public async Task<IActionResult> Shop()
-        //public IActionResult Shop()
-        //{
-        //    //var items = await _context.GetAllItemsAsync();
-        //    //return View(items);
-        //    return View();
-        //}
+
         [Route("blog")]
         public IActionResult Blog()
         {
@@ -66,13 +70,12 @@ namespace AutoPartsHub.Controllers
         }
 
 
-
         //[Route("Pages")]
         public async Task<IActionResult> Cart()
         {
 
-           
-            List<TblItem> tblItems=new List<TblItem>();
+
+            List<TblItem> tblItems = new List<TblItem>();
 
             if (!string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
             {
@@ -83,7 +86,7 @@ namespace AutoPartsHub.Controllers
 
                 if (listCartModel != null && listCartModel.Carts.Count > 0)
                 {
-                    List<int> ProductIds=listCartModel.Carts.Select(x=>x.ProductId).ToList();   
+                    List<int> ProductIds = listCartModel.Carts.Select(x => x.ProductId).ToList();
 
                     tblItems = (await _context.TblItems
                                       .Where(x => x.MDelete == false || x.MDelete == null)
@@ -107,13 +110,14 @@ namespace AutoPartsHub.Controllers
 
                 }
             }
-           
-            
+
+
 
             ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
 
             return View(tblItems);
         }
+
 
         [Route("GetCartCount")]
 
@@ -121,7 +125,7 @@ namespace AutoPartsHub.Controllers
         {
             try
             {
-               
+
                 int itemCount = 0;
                 if (!string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
                 {
@@ -136,20 +140,21 @@ namespace AutoPartsHub.Controllers
 
                 return Json(new { success = true, message = itemCount });
 
-              
+
             }
             catch (Exception exp)
             {
-                return Json(new {success = false,message=exp.Message});
+                return Json(new { success = false, message = exp.Message });
             }
-           
-            
+
+
         }
+
 
         public async Task<IActionResult> ConfirmOrder()
         {
             var orderDetails = await _context.TblOrderDetails
-                                           
+
                                              .Include(od => od.Item)
                                              .ThenInclude(item => item.TblItemImages)
                                              .ToListAsync();
@@ -159,10 +164,12 @@ namespace AutoPartsHub.Controllers
             return View(orderDetails);
         }
 
+
         public IActionResult ContactUS()
         {
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -188,6 +195,8 @@ namespace AutoPartsHub.Controllers
             }
 
         }
+
+
         [Route("itemDetail")]
         public async Task<IActionResult> ItemDetail(int id)
         {
@@ -202,38 +211,180 @@ namespace AutoPartsHub.Controllers
         }
 
         // GET: Checkout
-        [HttpGet]
-        public IActionResult Checkout(int itemId, decimal totalAmount)
-        {
-          
-            ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
-            ViewData["UserId"] = new SelectList(_context.TblUsers, "UserId", "UserName");
-            ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
-            ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
-            ViewData["ProvinceId"] = new SelectList(_context.TblProvinces, "ProvinceId", "ProvinceName");
-            ViewData["StatusId"] = new SelectList(_context.TblStatuses, "StatusId", "StatusName");
-            return View();
-        }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Checkout([Bind("OrderId,Email,PhoneNo,CountryId,ProvinceId,CityId,PostelCode ,CityName,CountryName,ProvinceName,DeliveryAddress,GrandTotal ")] TblOrdersMain tblOrdersMain)
+        [HttpGet("Checkout")]
+        public async Task<IActionResult> Checkout()
         {
             try
             {
-                if (ModelState.IsValid)
+                List<TblItem> tblItems = new List<TblItem>();
+
+                if (!string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
                 {
-                    _context.Add(tblOrdersMain);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Success");
+                    var data = HttpContext.Request.Cookies["AutoHubCart"];
+                    var DecriptData = Protection.Decrypt(data);
+
+                    ListCartModel listCartModel = JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+
+                    if (listCartModel != null && listCartModel.Carts.Count > 0)
+                    {
+                        List<int> ProductIds = listCartModel.Carts.Select(x => x.ProductId).ToList();
+
+                        tblItems = (await _context.TblItems
+                                          .Where(x => x.MDelete == false || x.MDelete == null)
+                                          .Where(x => ProductIds.Contains(x.ItemId))
+                                          .Include(t => t.Brand).Include(t => t.TblItemImages)
+                                          .ToListAsync());
+
+                        foreach (var item in tblItems)
+                        {
+                            var cartItem = listCartModel.Carts.FirstOrDefault(c => c.ProductId == item.ItemId);
+                            if (cartItem != null)
+                            {
+                                item.Quantity = cartItem.Quantity;
+                            }
+                        }
+
+
+                    }
+                    else
+                    {
+
+                    }
                 }
 
-                ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName", tblOrdersMain.ItemId);
-                ViewData["UserId"] = new SelectList(_context.TblUsers, "UserId", "UserName", tblOrdersMain.UserId);
-                ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName", tblOrdersMain.CityId);
-                ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName", tblOrdersMain.CountryId);
-                ViewData["ProvinceId"] = new SelectList(_context.TblProvinces, "ProvinceId", "ProvinceName", tblOrdersMain.ProvinceId);
-                ViewData["StatusId"] = new SelectList(_context.TblStatuses, "StatusId", "StatusName", tblOrdersMain.StatusId);
+
+
+                var orders = new TblOrdersMain
+                {
+                    Item = tblItems
+                };
+
+
+                ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
+                ViewData["UserId"] = new SelectList(_context.TblUsers, "UserId", "UserName");
+                ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
+                ViewData["CountryId"] = new SelectList(_context.TblCountries, "CountryId", "CountryName");
+                ViewData["ProvinceId"] = new SelectList(_context.TblProvinces, "ProvinceId", "ProvinceName");
+                ViewData["StatusId"] = new SelectList(_context.TblStatuses, "StatusId", "StatusName");
+
+                return View(orders);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in Checkout");
+                ViewBag.Message = ex.Message;
+                return View();
+            }
+        }
+
+
+        [HttpPost("Checkout")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout([Bind("OrderId,ItemId,UserId,UserName,GrandTotal,OrderDate,ItemName,Email,PhoneNo,CountryId,ProvinceId,CityId,PostelCode,CityName,CountryName,ProvinceName,DeliveryAddress,PaidAmount,PaymentId,PaymentType,Remarks,ShippingAmount,Status")] TblOrdersMain tblOrdersMain)
+        {
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        tblOrdersMain.OrderDate = DateTime.Now;
+                        tblOrdersMain.StatusId = 1; 
+                        tblOrdersMain.PaymentId = 1; 
+                        tblOrdersMain.ShippingAmount = 100; 
+                        tblOrdersMain.GrandTotal = 12; 
+
+                        _context.Add(tblOrdersMain);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Success");
+                    }
+                }
+                else
+                {
+                    var user = await _context.TblUsers
+                        .Where(x => x.Email == tblOrdersMain.Email)
+                        .FirstOrDefaultAsync();
+
+                    if (user == null || user.UserId <= 0)
+                    {
+                        var newUser = new TblUser
+                        {
+                            UserName = "Hamza Zia",
+                            Email = tblOrdersMain.Email,
+                            Password = GeneratePassword.GenerateRandomPassword(10),
+                            PhoneNumber = tblOrdersMain.PhoneNo,
+                            RollId = 2 // Set role to 2 for non-admin users
+                        };
+
+
+
+                        _context.TblUsers.Add(newUser);
+                        await _context.SaveChangesAsync();
+
+                        var reciver = tblOrdersMain.Email;
+                        var subject = $"Welcome to AutoPartsHub";
+                        var message = $"Your Login Password is {newUser.Password} and your Id is {newUser.UserId}";
+                        if (!IsValidEmail(reciver))
+                        {
+                            return Json(new { success = false, error = "Invalid email address" });
+                        }
+
+                        try
+                        {
+                            await _mailService.SendMailAsync(reciver, subject, message);
+                            var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, newUser.UserName),
+                                new Claim(ClaimTypes.Email, newUser.Email),
+                                new Claim(ClaimTypes.Role, "Customer"),
+                                new Claim("RoleId", newUser.RollId.ToString()),
+                                           };
+
+                            var claimsIdentity = new ClaimsIdentity(
+                                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+
+
+                            await HttpContext.SignInAsync(
+                                CookieAuthenticationDefaults.AuthenticationScheme,
+                                new ClaimsPrincipal(claimsIdentity));
+                            return Json(new { success = true });
+
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log the exception message
+                            Console.WriteLine($"Error sending email: {ex.Message}");
+                            return Json(new { success = false, error = "Failed to send email" });
+                        }
+                    }
+                    else
+                    {
+                        var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, user.UserName),
+                                new Claim(ClaimTypes.Email, user.Email),
+                                new Claim(ClaimTypes.Role, user.Roll.RollName),
+                                new Claim("RoleId", user.RollId.ToString()),
+                                           };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+
+
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity));
+
+                        return Json(new { success = true });
+                    }
+               
+                
+                
+                }
+
                 return View(tblOrdersMain);
             }
             catch (Exception ex)
@@ -242,13 +393,28 @@ namespace AutoPartsHub.Controllers
                 return View(tblOrdersMain);
             }
         }
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         [Route("wishList")]
         [HttpGet]
         public async Task<IActionResult> WishList()
         {
-            var item = await _context.TblItems.Include(x=>x.TblItemImages).ToListAsync();
+            var item = await _context.TblItems.Include(x => x.TblItemImages).ToListAsync();
             return View(item);
         }
+
+
         [Route("/addToWishList")]
         [HttpPost]
         public IActionResult WishList(int itemId, int quantity)
@@ -335,18 +501,19 @@ namespace AutoPartsHub.Controllers
             }
         }
 
-    
+
+
         [Route("addToCart")]
         [HttpPost]
-        public  IActionResult AddToCart(int itemId, int quantity)
+        public IActionResult AddToCart(int itemId, int quantity)
         {
 
             try
             {
-                CookieOptions cookieOptions= new CookieOptions();
+                CookieOptions cookieOptions = new CookieOptions();
                 cookieOptions.Secure = true;
                 cookieOptions.HttpOnly = true;
-                cookieOptions.Expires=DateTime.Now.AddDays(30);
+                cookieOptions.Expires = DateTime.Now.AddDays(30);
                 cookieOptions.IsEssential = true;
 
                 if (string.IsNullOrEmpty(HttpContext.Request.Cookies["AutoHubCart"]))
@@ -354,15 +521,15 @@ namespace AutoPartsHub.Controllers
                     CartModel cartModel = new CartModel()
                     {
                         ProductId = itemId,
-                        Quantity = quantity 
+                        Quantity = quantity
                     };
 
                     ListCartModel listCartModel = new ListCartModel();
                     listCartModel.Carts.Add(cartModel);
 
-                     string JsonData=JsonConvert.SerializeObject(listCartModel);
+                    string JsonData = JsonConvert.SerializeObject(listCartModel);
 
-                    var ProtectedData=Protection.Encrypt(JsonData);
+                    var ProtectedData = Protection.Encrypt(JsonData);
 
                     HttpContext.Response.Cookies.Append("AutoHubCart", ProtectedData, cookieOptions);
                 }
@@ -370,9 +537,9 @@ namespace AutoPartsHub.Controllers
                 {
                     var data = HttpContext.Request.Cookies["AutoHubCart"];
 
-                    var DecriptData=Protection.Decrypt(data);
+                    var DecriptData = Protection.Decrypt(data);
 
-                    ListCartModel listCartModel=JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
+                    ListCartModel listCartModel = JsonConvert.DeserializeObject<ListCartModel>(DecriptData);
 
                     if (listCartModel != null && listCartModel.Carts.Count > 0)
                     {
@@ -383,9 +550,9 @@ namespace AutoPartsHub.Controllers
                         }
                         else
                         {
-                            listCartModel.Carts.Add(new CartModel() 
+                            listCartModel.Carts.Add(new CartModel()
                             {
-                                ProductId= itemId,
+                                ProductId = itemId,
                                 Quantity = quantity
                             });
 
@@ -395,8 +562,8 @@ namespace AutoPartsHub.Controllers
                             var ProtectedData = Protection.Encrypt(JsonData);
 
                             HttpContext.Response.Cookies.Append("AutoHubCart", ProtectedData, cookieOptions);
-                        
-                         }
+
+                        }
                     }
                     else
                     {
@@ -430,7 +597,7 @@ namespace AutoPartsHub.Controllers
 
 
 
-      
+
         // POST: Items/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -471,16 +638,16 @@ namespace AutoPartsHub.Controllers
             }
             catch (Exception exp)
             {
-                ViewBag.ErrorMsg=exp.Message;
+                ViewBag.ErrorMsg = exp.Message;
                 return RedirectToAction(nameof(Cart));
             }
 
 
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
-	}
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
 }

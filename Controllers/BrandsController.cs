@@ -8,9 +8,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoPartsHub.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AutoPartsHub.Controllers
 {
+
+    [CustomAuthorization]
+    [Authorize(Roles = "Admin")]
     public class BrandsController : Controller
     {
         private readonly AutoPartsHubContext _context;

@@ -67,4 +67,8 @@ public partial class TblItem
         }
     }
 
+    public static implicit operator TblItem(List<TblItem> v)
+    {
+        throw new NotImplementedException();
+    }
 }
