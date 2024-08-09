@@ -27,7 +27,7 @@ public partial class TblItem
     public IFormFile? DefaultImageFile { get; set; }
 
     [NotMapped]
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
     public string? ShortDescription { get; set; }
 
@@ -46,7 +46,7 @@ public partial class TblItem
     public virtual TblBrand? Brand { get; set; }
 
     public virtual ICollection<TblItemCategory> TblItemCategories { get; set; } = new List<TblItemCategory>();
-    public virtual ICollection<TblOrdersMain> TblOrdersMain { get; set; } = new List<TblOrdersMain>();
+    public virtual ICollection<TblItemReview> TblItemReviews { get; set; } = new List<TblItemReview>();
 
     public virtual ICollection<TblItemColor> TblItemColors { get; set; } = new List<TblItemColor>();
 

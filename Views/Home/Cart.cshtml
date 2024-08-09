@@ -68,7 +68,7 @@
                                             <td class="product-list">
                                                 <div class="cart-product-item d-flex align-items-center">
                                                     <div class="remove-icon">
-                                                        <form asp-action="Delete" method="post" class="deleteForm">
+                                                        <form asp-action="DeleteFromCart" method="post" class="deleteForm">
                                                             <input type="hidden" name="id" value="@item.ItemId" asp-for="@item.ItemId" />
                                                             <button type="submit" class="btn-sm"><i class="fa fa-trash"></i></button>
                                                         </form>
@@ -88,7 +88,7 @@
                                             <td class="quantity">
                                                 <div class="pro-qty mr-3 mb-4 mb-sm-0">
                                                     <label for="quantity" class="sr-only">Quantity</label>
-                                                    <input type="text" id="quantity" min="1" title="Quantity" value="1" />
+                                                    <input type="text" id="quantity" min="1" title="Quantity" value="@item.Quantity" />
                                                 </div>
                                                
                                             </td>
@@ -178,10 +178,6 @@
 
             
             });
-      
-      
-
-
-
+     
     </script>
 }

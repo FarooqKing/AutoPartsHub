@@ -312,8 +312,8 @@
             // Handle Add to Cart button click
             $('.addToCart').on('click', function (e) {
                 e.preventDefault();
-                var itemId = @Model.ItemId; // Get the item ID from the model
-                var quantity = $('#quantity').val(); // Get the quantity from the input
+                var itemId = @Model.ItemId; 
+                var quantity = $('#quantity').val(); 
                 $.ajax({
                     type: 'POST',
                     url: '/addToCart',
@@ -335,8 +335,8 @@
 
             $('.addToWishList').on('click', function (e) {
                 e.preventDefault();
-                var itemId = @Model.ItemId; // Get the item ID from the model
-                var quantity = $('#quantity').val(); // Get the quantity from the input
+                var itemId = @Model.ItemId; 
+                var quantity = $('#quantity').val(); 
                 $.ajax({
                     type: 'POST',
                     url: '/addToWishList',

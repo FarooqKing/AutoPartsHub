@@ -23,7 +23,7 @@ public partial class AutoPartsHubContext : DbContext
 
     public virtual DbSet<TblColor> TblColors { get; set; }
 
-    public virtual DbSet<TblContectU> TblContectUs { get; set; }
+    public virtual DbSet<TblContactU> TblContactUs { get; set; }
 
     public virtual DbSet<TblCountry> TblCountries { get; set; }
 
@@ -69,7 +69,7 @@ public partial class AutoPartsHubContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=UMAR-PC; DataBase=AutoPartsHub; Trusted_Connection=True; TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=UMAR-PC;database=AutoPartsHub;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -126,11 +126,11 @@ public partial class AutoPartsHubContext : DbContext
             entity.Property(e => e.MDelete).HasColumnName("mDelete");
         });
 
-        modelBuilder.Entity<TblContectU>(entity =>
+        modelBuilder.Entity<TblContactU>(entity =>
         {
-            entity.HasKey(e => e.ContectUsId);
+            entity.HasKey(e => e.ContectUsId).HasName("PK_tbl_ContectUs");
 
-            entity.ToTable("tbl_ContectUs");
+            entity.ToTable("tbl_ContactUs");
 
             entity.Property(e => e.ContectUsId).HasColumnName("ContectUsID");
             entity.Property(e => e.ContectUsEmail).HasMaxLength(50);
@@ -176,7 +176,6 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Brand).WithMany(p => p.TblItems)
                 .HasForeignKey(d => d.BrandId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_tbl_Items_tbl_Brand");
         });
 
@@ -221,7 +220,7 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.TblItemColors)
                 .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("FK_tbl_Item_Color_tbl_Items1");
+                .HasConstraintName("FK_tbl_Item_Color_tbl_Items");
         });
 
         modelBuilder.Entity<TblItemImage>(entity =>
@@ -240,7 +239,7 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Item).WithMany(p => p.TblItemImages)
                 .HasForeignKey(d => d.ItemId)
-                .HasConstraintName("FK_tbl_ItemImages_tbl_ItemImages");
+                .HasConstraintName("FK_tbl_ItemImages_tbl_Items");
         });
 
         modelBuilder.Entity<TblItemReview>(entity =>
@@ -253,6 +252,10 @@ public partial class AutoPartsHubContext : DbContext
             entity.Property(e => e.Mdelete).HasColumnName("mdelete");
             entity.Property(e => e.ReviewName).HasMaxLength(50);
             entity.Property(e => e.ReviewText).HasMaxLength(500);
+
+            entity.HasOne(d => d.Item).WithMany(p => p.TblItemReviews)
+                .HasForeignKey(d => d.ItemId)
+                .HasConstraintName("FK_tbl_ItemReview_tbl_Items");
         });
 
         modelBuilder.Entity<TblItemSize>(entity =>
@@ -323,6 +326,10 @@ public partial class AutoPartsHubContext : DbContext
             entity.HasOne(d => d.Item).WithMany(p => p.TblOrderDetails)
                 .HasForeignKey(d => d.ItemId)
                 .HasConstraintName("FK_tbl_OrderDetails_tbl_Items");
+
+            entity.HasOne(d => d.OrderMain).WithMany(p => p.TblOrderDetails)
+                .HasForeignKey(d => d.OrderMainId)
+                .HasConstraintName("FK_tbl_OrderDetails_tbl_OrdersMain");
         });
 
         modelBuilder.Entity<TblOrdersMain>(entity =>
@@ -497,7 +504,7 @@ public partial class AutoPartsHubContext : DbContext
 
             entity.HasOne(d => d.Roll).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.RollId)
-                .HasConstraintName("FK_User_Roll");
+                .HasConstraintName("FK_tbl_User_tbl_Roll");
         });
 
         modelBuilder.Entity<TblVoucherCode>(entity =>
@@ -511,33 +518,9 @@ public partial class AutoPartsHubContext : DbContext
             entity.Property(e => e.VoucherDiscount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.VoucherText).HasMaxLength(500);
         });
-        modelBuilder.Entity<TblBrand>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblCategory>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblColor>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblCountry>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblItem>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblItemCategory>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblItemColor>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblItemImage>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblItemSize>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblItemTag>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblNewsLater>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblOrderDetail>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblOrdersMain>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblPayment>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblRoll>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblShippingPolicy>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblSize>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblStatus>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblTag>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
-        modelBuilder.Entity<TblUser>().HasQueryFilter(c => c.MDelete == false || c.MDelete == null);
 
         OnModelCreatingPartial(modelBuilder);
     }
 
-    public async Task<List<TblItem>> GetAllItemsAsync()
-    {
-        return await TblItems.FromSqlRaw("EXEC sp_GetAllItems").ToListAsync();
-    }
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

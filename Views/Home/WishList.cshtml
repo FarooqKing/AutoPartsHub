@@ -51,7 +51,10 @@
                                         <td class="product-list">
                                             <div class="cart-product-item d-flex align-items-center">
                                                 <div class="remove-icon">
-                                                    <button><i class="fa fa-trash-o"></i></button>
+                                                        <form asp-action="DeleteFromWishList" method="post" class="deleteForm">
+                                                            <input type="hidden" name="id" value="@item.ItemId" asp-for="@item.ItemId" />
+                                                            <button type="submit" class="btn-sm"><i class="fa fa-trash"></i></button>
+                                                        </form>
                                                 </div>
                                                 <a href="single-product.html" class="product-thumb">
                                                         <img src="@item.TblItemImages.FirstOrDefault(img => img.IsDefault).NormalImage" alt="Product" />

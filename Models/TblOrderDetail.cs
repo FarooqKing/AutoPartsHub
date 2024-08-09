@@ -27,5 +27,9 @@ public partial class TblOrderDetail
 
     public bool MDelete { get; set; }
 
+    public int? OrderMainId { get; set; }
+
     public virtual TblItem? Item { get; set; }
+
+    public virtual TblOrdersMain? OrderMain { get; set; }
 }

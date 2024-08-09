@@ -12,8 +12,8 @@
                     <div class="col-lg-6">
                         <div class="slide-content">
                             <div class="slide-content-inner">
-                                <h3>NEW TECHNOLOGY & BUILD</h3>
-                                <h2>WHEELS &amp; TIRES COLLECTIONS</h2>
+                                <h3>All Kind of Parts are Available That </h3>
+                                <h2>You Need Find Here</h2>
                                 <a class="btn btn-white" href="shop">Shop Now</a>
                             </div>
                         </div>
@@ -27,8 +27,8 @@
                     <div class="col-12">
                         <div class="slide-content">
                             <div class="slide-content-inner">
-                                <h3>NEW TECHNOLOGY & BUILD</h3>
-                                <h2>WHEELS &amp; TIRES <br> COLLECTIONS</h2>
+                                <h3>All Kind of Parts are Available That </h3>
+                                <h2>You Need Find Here</h2>
                                 <a class="btn btn-white" href="shop">Shop Now</a>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                         <!-- Start Product Item -->
                         <div class="product-item">
                             <div class="product-item__thumb">
-                                <a href="single-product.html">
+                                    <a href="itemDetail?id=@item.ItemId">
                                     <img class="thumb-primary" src="@item.TblItemImages.FirstOrDefault(x=>x.IsDefault).NormalImage" alt="Product" />
                                     <img class="thumb-secondary" src="../../assets/img/product/product-2.png" alt="Product" />
                                 </a>
@@ -255,7 +255,7 @@
                     <div class="col">
                         <div class="product-item">
                             <div class="product-item__thumb">
-                                <a href="single-product.html">
+                                    <a href="itemDetail?id=@item.ItemId">
                                     <img class="thumb-primary" src="@item.TblItemImages.FirstOrDefault(x=>x.IsDefault).NormalImage"   alt="Product" />
                                     <img class="thumb-secondary"  src="@item.TblItemImages.FirstOrDefault(x=>x.IsDefault).NormalImage"  alt="Product" />
                                 </a>
@@ -269,7 +269,7 @@
                                     <span><i class="ion-android-star"></i></span>
                                     <span><i class="ion-android-star-half"></i></span>
                                 </div>
-                                <h4 class="title"><a href="single-product.html">@item.ItemName</a></h4>
+                                    <h4 class="title"><a href="itemDetail?id=@item.ItemId">@item.ItemName</a></h4>
                                 <span class="price"><strong>Price:</strong>@item.ItemPrice</span>
                             </div>
 

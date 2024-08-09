@@ -8,11 +8,11 @@ public partial class TblOrdersMain
 {
     public int OrderId { get; set; }
 
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
+    [NotMapped]
+    public string UserName { get; set; }
 
-    public int? ItemId { get; set; }
-
-    public decimal ?GrandTotal { get; set; }
+    public decimal GrandTotal { get; set; }
 
     public decimal? DiscountAmount { get; set; }
 
@@ -22,7 +22,7 @@ public partial class TblOrdersMain
 
     public string PaymentType { get; set; } = null!;
 
-    public decimal ?ShippingAmount { get; set; }
+    public decimal ShippingAmount { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
@@ -36,9 +36,9 @@ public partial class TblOrdersMain
 
     public int? CityId { get; set; }
 
-    public string? DeliveryAddress { get; set; } = null!;
+    public string DeliveryAddress { get; set; } = null!;
 
-    public bool? Remarks { get; set; }
+    public bool Remarks { get; set; }
 
     public DateTime? DeliverDays { get; set; }
 
@@ -59,11 +59,12 @@ public partial class TblOrdersMain
     public virtual TblCity? City { get; set; }
 
     public virtual TblCountry? Country { get; set; }
-    public virtual ICollection<TblItem> Item { get; set; } = new List<TblItem>();
 
     public virtual TblProvince? Province { get; set; }
 
     public virtual TblStatus? Status { get; set; }
+
+    public virtual ICollection<TblOrderDetail> TblOrderDetails { get; set; } = new List<TblOrderDetail>();
 
     public virtual TblUser User { get; set; } = null!;
 }

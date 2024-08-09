@@ -16,22 +16,22 @@ namespace AutoPartsHub.Controllers
 			_UserContext = context;
 		}
 
-
         [HttpPost]
-        public async Task<IActionResult> Login(Login loginModel)
+        [Route("login")]
+        public async Task<IActionResult> Login(string UserName, string Password, Boolean KeepLoginIn)
         {
             try
             {
                 // Validate input
-                if (string.IsNullOrEmpty(loginModel.Email) || string.IsNullOrEmpty(loginModel.Password))
+                if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
                 {
                     throw new Exception("Email and Password are required.");
                 }
 
                 var user = await _UserContext.TblUsers
                     .Where(x => (x.MDelete == false || x.MDelete == null)
-                        && x.Email.ToLower() == loginModel.Email.ToLower()
-                        && x.Password == loginModel.Password)
+                        && x.Email.ToLower() == UserName.ToLower()
+                        && x.Password == Password)
                     .Include(x => x.Roll)
                     .FirstOrDefaultAsync();
 
@@ -41,19 +41,20 @@ namespace AutoPartsHub.Controllers
                 }
 
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Roll.RollName),
-            new Claim("RoleId", user.RollId.ToString()),
-        };
+  {
+      new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+      new Claim(ClaimTypes.Name, user.UserName),
+      new Claim(ClaimTypes.Email, user.Email),
+      new Claim(ClaimTypes.Role, user.Roll.RollName),
+      new Claim("RoleId", user.RollId.ToString()),
+  };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
                 {
-                    IsPersistent = loginModel.RememberMe,
+                    IsPersistent = KeepLoginIn,
                 };
 
                 await HttpContext.SignInAsync(
@@ -61,22 +62,22 @@ namespace AutoPartsHub.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return Json(new { success = true });
+                return Json(new { success = true, redirect = Url.Action("Index", "Home") });
             }
             catch (Exception exp)
             {
-                loginModel.Password = ""; // Clear the password for security
-                loginModel.InvalidMessage = exp.Message;
-                loginModel.isInvalid = true;
+                Password = ""; // Clear the password for security
+                               //loginModel.InvalidMessage = exp.Message;
+                               //loginModel.isInvalid = true;
                 return Json(new { success = false });
 
             }
         }
 
 
-      
 
-		[HttpPost]
+
+        [HttpPost]
 		public async Task<IActionResult> Registeration(Registeration registerationModel)
 		{
 			try
