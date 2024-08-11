@@ -193,14 +193,14 @@
 														</tr>
 													</thead>
 													<tbody >
-														@if(Model.TodayOrderDetail != null)
+														@if (Model.TodayOrderDetail != null)
 														{
 														
 															int serialNumber = 1; // Initialize the serial number counter
 															var today = DateTime.Today; // Get today's date
 													
 
-														@foreach (var item in Model.TodayOrderDetail)
+															@foreach (var item in Model.TodayOrderDetail)
 														{
 															<tr>
 																<td>@serialNumber</td> <!-- Display the serial number -->

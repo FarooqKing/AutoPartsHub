@@ -59,6 +59,8 @@ namespace AutoPartsHub.Controllers
 	{
 		var today = DateTime.Today;
 		CheckoutViewModel checkoutView = new CheckoutViewModel();
+            try
+            {
 
 		if (User.Identity.IsAuthenticated)
 		{
@@ -67,33 +69,35 @@ namespace AutoPartsHub.Controllers
 			if (!string.IsNullOrEmpty(userIdString) && int.TryParse(userIdString, out int userId))
 			{
 
-                    var order = checkoutView.TblOrdersMain = await _context.TblOrdersMains
+               var order =       checkoutView.TblOrdersMain = await _context.TblOrdersMains
     .Include(x => x.User)
     .Include(x => x.City)
     .FirstAsync(x => x.UserId == userId);
                     // Get today's orders
-                    var todayOrders = await _context.TblOrderDetails
-					.Include(x => x.Item)
+                checkoutView.OrderDetail = await _context.TblOrderDetails
+					.Include(x=>x.OrderMain)
+                    .Include(x => x.Item)
 					.ThenInclude(x => x.TblItemImages)
-					.Where(x => x.OrderMain.UserId == userId && x.OrderMain.OrderId == order.OrderId && EF.Functions.DateDiffDay(x.OrderMain.CreatedAt, today) == 0)
+					.Where(x => x.OrderMain.UserId == userId)
 					.ToListAsync();
-
-				// Get all orders
-				var allOrders = await _context.TblOrderDetails
-					.Include(x => x.Item)
-					.ThenInclude(x => x.TblItemImages)
-					.Where(x => x.OrderMain.UserId == userId && x.OrderMain.OrderId == order.OrderId)
-					.ToListAsync();
-
-				checkoutView.TodayOrderDetail = todayOrders;
-				checkoutView.OrderDetail = allOrders;
-			}
+						checkoutView.TodayOrderDetail = await _context.TblOrderDetails
+							.Include(x => x.OrderMain)
+							.Include(x => x.Item)
+							.ThenInclude(x => x.TblItemImages)
+                            .Where(x=> x.OrderMain.UserId == userId && x.OrderMain.OrderDate==DateTime.Today )
+							.ToListAsync();
+						
+					}
 		}
+            }catch(Exception ex)
+            {
+                return View(ex.Message);
+            }
 
 		ViewData["ItemId"] = new SelectList(_context.TblItems, "ItemId", "ItemName");
 		ViewData["CityId"] = new SelectList(_context.TblCities, "CityId", "CityName");
 		ViewData["UserId"] = new SelectList(_context.TblUsers, "UserId", "UserName");
-
+        
 		return View(checkoutView);
 	}
 
@@ -409,16 +413,16 @@ namespace AutoPartsHub.Controllers
                     
 
                         tblOrdersMain.UserId = userId;
-                        tblOrdersMain.OrderDate = DateTime.Now;
+                        tblOrdersMain.OrderDate = DateTime.Today;
                         tblOrdersMain.StatusId = 1;
                         tblOrdersMain.ShippingAmount = 500;
                         tblOrdersMain.GrandTotal = grandTotal;
                         tblOrdersMain.PaymentId = 1;
                         tblOrdersMain.PaidAmount = paidAmount;
-                        tblOrdersMain.CreatedAt = DateTime.Now;
+                        tblOrdersMain.CreatedAt = DateTime.Today;
                         tblOrdersMain.Createdby = userId;
                         tblOrdersMain.DiscountAmount = 0;
-                        tblOrdersMain.DeliverDays = DateTime.Now.AddDays(3);
+                        tblOrdersMain.DeliverDays = DateTime.Today.AddDays(3);
 
                         _context.TblOrdersMains.Add(tblOrdersMain);
                         await _context.SaveChangesAsync();
@@ -431,7 +435,7 @@ namespace AutoPartsHub.Controllers
                                 ItemQuantity = item.Quantity,
                                 TotelAmount = item.ItemPrice * item.Quantity,
                                 DiscountAmount = item.Discount ?? 0,
-                                CreatedAt = DateTime.Now,
+                                CreatedAt = DateTime.Today,
                                 CreatedBy = userId,
                                 MDelete = false,
                                 OrderMainId = tblOrdersMain.OrderId 
@@ -503,16 +507,16 @@ namespace AutoPartsHub.Controllers
 
 
 							tblOrdersMain.UserId = newUser.UserId;
-                                tblOrdersMain.OrderDate = DateTime.Now;
+                                tblOrdersMain.OrderDate = DateTime.Today;
                                 tblOrdersMain.StatusId = 1;
                                 tblOrdersMain.ShippingAmount = 500;
                                 tblOrdersMain.GrandTotal = grandTotal;
                                 tblOrdersMain.PaymentId = 1;
-                            tblOrdersMain.CreatedAt = DateTime.Now;
+                            tblOrdersMain.CreatedAt = DateTime.Today;
 							tblOrdersMain.Createdby = newUser.UserId;
 							tblOrdersMain.PaidAmount = paidAmount;
                                 tblOrdersMain.DiscountAmount = 0;
-                                tblOrdersMain.DeliverDays = DateTime.Now.AddDays(3);
+                                tblOrdersMain.DeliverDays = DateTime.Today.AddDays(3);
 
 
                                 _context.TblOrdersMains.Add(tblOrdersMain);
@@ -527,7 +531,7 @@ namespace AutoPartsHub.Controllers
                                         ItemQuantity = item.Quantity ,
                                         TotelAmount = item.ItemPrice * item.Quantity ,
                                         DiscountAmount = item.Discount ?? 0,
-                                        CreatedAt = DateTime.Now,
+                                        CreatedAt = DateTime.Today,
                                         CreatedBy = newUser.UserId,
                                         MDelete = false,
                                         OrderMainId = tblOrdersMain.OrderId
@@ -571,16 +575,16 @@ namespace AutoPartsHub.Controllers
 						decimal paidAmount = grandTotal + 500;
 
 						tblOrdersMain.UserId = existingUser.UserId;
-                            tblOrdersMain.OrderDate = DateTime.Now;
+                            tblOrdersMain.OrderDate = DateTime.Today;
                             tblOrdersMain.StatusId = 1;
                             tblOrdersMain.ShippingAmount = 500;
                             tblOrdersMain.GrandTotal = grandTotal;
                             tblOrdersMain.PaymentId = 1;
-						tblOrdersMain.CreatedAt = DateTime.Now;
+						tblOrdersMain.CreatedAt = DateTime.Today;
 						tblOrdersMain.Createdby = existingUser.UserId;
 						tblOrdersMain.PaidAmount = paidAmount;
                             tblOrdersMain.DiscountAmount = 0;
-                            tblOrdersMain.DeliverDays = DateTime.Now.AddDays(3);
+                            tblOrdersMain.DeliverDays = DateTime.Today.AddDays(3);
 
 
                             _context.TblOrdersMains.Add(tblOrdersMain);
